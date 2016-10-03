@@ -1,0 +1,13 @@
+services:
+
+    gendoria_command_queue.processor_factory:
+        class: Gendoria\CommandQueueBundle\CommandQueue\ContainerAwareProcessorFactory
+        arguments: 
+            - '@service_container'
+            - '@?logger'
+            
+    gendoria_command_queue.manager:
+        class: Gendoria\CommandQueue\QueueManager\MultipleQueueManager
+        arguments:
+            - '@?logger'
+            

@@ -1,0 +1,42 @@
+{
+    "name": "gendoria/command-queue-bundle",
+    "description": "Symfony bundle for Command Queue",
+    "authors": [
+        {
+            "name": "Gendoria",
+            "email": "gendoria@gendoria.pl",
+            "role": "owner"
+        },
+        {
+            "name": "Tomasz Struczyński",
+            "email": "t.struczynski@gmail.com",
+            "role": "developer"
+        }
+    ],
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/gendoria/command-queue"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "psr/log": "~1.0",
+        "gendoria/command-queue": "dev-master",
+        "symfony/framework-bundle": ">=2.7.0",
+        "symfony/dependency-injection": ">=2.7.0",
+        "symfony/yaml": ">=2.7.0"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": ">=2.7.0"
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Gendoria\\CommandQueueBundle\\": "src/Gendoria/CommandQueueBundle"
+        }
+    },
+    "minimum-stability": "dev"
+}
