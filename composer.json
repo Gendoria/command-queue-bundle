@@ -21,6 +21,7 @@
         "symfony/framework-bundle": ">=2.7.0",
         "symfony/dependency-injection": ">=2.7.0",
         "symfony/yaml": ">=2.7.0",
+        "symfony/monolog-bundle": "~2.4",        
         "gendoria/command-queue": "dev-master"
     },
     "require-dev": {

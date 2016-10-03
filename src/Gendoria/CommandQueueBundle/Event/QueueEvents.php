@@ -18,7 +18,7 @@ final class QueueEvents
      *
      * @var string
      */
-    const WORKER_RUN_BEFORE = 'gendoria_command_queue.worker_run.before';
+    const WORKER_RUN_BEFORE_TRANSLATE = 'gendoria_command_queue.worker_run.before_translate';
     
     /**
      * This event is thrown after each successfull worker run.
@@ -26,7 +26,7 @@ final class QueueEvents
      * @see QueueWorkerRunEvent
      * @var string
      */
-    const WORKER_RUN_AFTER = 'gendoria_command_queue.worker_run.after';
+    const WORKER_RUN_AFTER_PROCESS = 'gendoria_command_queue.worker_run.after_process';
     
     /**
      * This event is thrown after each unsuccessfull worker run.
@@ -34,5 +34,5 @@ final class QueueEvents
      * @see QueueWorkerRunEvent
      * @var string
      */
-    const WORKER_RUN_ERROR = 'gendoria_command_queue.worker_run.error';
+    const WORKER_RUN_PROCESSOR_ERROR = 'gendoria_command_queue.worker_run.processor_error';
 }
