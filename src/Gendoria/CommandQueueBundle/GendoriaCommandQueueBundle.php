@@ -23,11 +23,11 @@ class GendoriaCommandQueueBundle extends Bundle
      */
     public function getContainerExtension()
     {
-        if (null === $this->extension) {
+        if (null === $this->extension || false === $this->extension) {
             $this->extension = new GendoriaCommandQueueExtension();
         }
 
-        return $this->extension;
+        return $this->extension ? $this->extension : null;
     }
 
     /**
