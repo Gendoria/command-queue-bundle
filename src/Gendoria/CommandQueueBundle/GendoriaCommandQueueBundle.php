@@ -27,7 +27,7 @@ class GendoriaCommandQueueBundle extends Bundle
             $this->extension = new GendoriaCommandQueueExtension();
         }
 
-        return $this->extension ? $this->extension : null;
+        return $this->extension;
     }
 
     /**

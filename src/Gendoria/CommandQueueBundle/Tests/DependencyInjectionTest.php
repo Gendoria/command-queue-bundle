@@ -9,6 +9,7 @@ namespace Gendoria\CommandQueueBundle\Tests;
 use Gendoria\CommandQueue\QueueManager\MultipleQueueManager;
 use Gendoria\CommandQueue\SendDriver\SendDriverInterface;
 use Gendoria\CommandQueueBundle\DependencyInjection\GendoriaCommandQueueExtension;
+use Gendoria\CommandQueueBundle\DependencyInjection\Pass\CommandProcessorPass;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\PoolsPass;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
@@ -44,6 +45,7 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
         ));
         $extension->load(array($config), $container);
         $container->addCompilerPass(new PoolsPass());
+        $container->addCompilerPass(new CommandProcessorPass());
         $container->compile();
 
         /* @var $manager MultipleQueueManager */
