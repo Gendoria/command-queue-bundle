@@ -18,7 +18,7 @@ use PHPUnit_Framework_TestCase;
 /**
  * Description of QueueBeforeGetProcessorEventTest
  *
- * @author Tomasz Struczyński <tomasz.struczynski@isobar.com>
+ * @author Tomasz Struczyński <t.struczynski@gmail.com>
  */
 class QueueProcessErrorEventTest extends PHPUnit_Framework_TestCase
 {
