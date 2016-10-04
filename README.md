@@ -6,13 +6,16 @@
 [![Downloads](https://img.shields.io/packagist/dt/gendoria/command-queue-bundle.svg)](https://packagist.org/packages/gendoria/command-queue-bundle)
 [![Latest Stable Version](https://img.shields.io/packagist/v/gendoria/command-queue-bundle.svg)](https://packagist.org/packages/gendoria/command-queue-bundle)
 
+Bundle implementing command queue mechanism, making it possible to send command from main Symfony process
+and execute them using pools of backend workers.
+
 Bundle created in cooperation with [Isobar Poland](http://www.isobar.com/pl/).
 
 ![Isobar Poland](doc/images/isobar.jpg "Isobar Poland logo") 
 
-# Installation
+## Installation
 
-## Step 1: Download the Bundle
+### Step 1: Download the Bundle
 
 
 Open a command console, enter your project directory and execute the
@@ -26,7 +29,7 @@ This command requires you to have Composer installed globally, as explained
 in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
 of the Composer documentation.
 
-## Step 2: Enable the Bundle
+### Step 2: Enable the Bundle
 
 
 Then, enable the bundle by adding it to the list of registered bundles
@@ -54,8 +57,14 @@ class AppKernel extends Kernel
 }
 ```
 
-## Step 3: Add bundle configuration
+### Step 3: Add bundle configuration
 
 To be able to use the bundle, you have to add correct configuration in your `app/config/config.yml`.
 
 <Documentation in progress>
+
+## Usage
+
+This bundle makes it possible to create a distributed execution environment for varius commands. 
+Developer can use it for example to delegate processor - heavy tasks for backend execution
+instead of processing them in frontend (thus impairing user experience).
