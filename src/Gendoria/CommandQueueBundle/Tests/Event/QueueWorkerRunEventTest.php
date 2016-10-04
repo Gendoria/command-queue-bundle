@@ -21,7 +21,10 @@ class QueueWorkerRunEventTest extends PHPUnit_Framework_TestCase
     public function test()
     {
         $worker = $this->getMockBuilder(\Gendoria\CommandQueue\Worker\WorkerInterface::class)->getMock();
-        $event = new QueueWorkerRunEvent($worker, 'test');
+        $event = $this->getMockBuilder(QueueWorkerRunEvent::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs(array($worker, 'test'))
+            ->getMockForAbstractClass();
         $this->assertEquals($worker, $event->getWorker());
         $this->assertEquals('test', $event->getSubsystem());
     }    
@@ -29,7 +32,10 @@ class QueueWorkerRunEventTest extends PHPUnit_Framework_TestCase
     public function testNullSubsystem()
     {
         $worker = $this->getMockBuilder(\Gendoria\CommandQueue\Worker\WorkerInterface::class)->getMock();
-        $event = new QueueWorkerRunEvent($worker);
+        $event = $this->getMockBuilder(QueueWorkerRunEvent::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs(array($worker))
+            ->getMockForAbstractClass();
         $this->assertEquals($worker, $event->getWorker());
         $this->assertNull($event->getSubsystem());
     }    

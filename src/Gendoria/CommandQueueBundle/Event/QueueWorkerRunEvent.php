@@ -10,7 +10,7 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @author Tomasz Struczyński <t.struczynski@gmail.com>
  */
-class QueueWorkerRunEvent extends Event
+abstract class QueueWorkerRunEvent extends Event
 {
     /**
      * Subsystem name.

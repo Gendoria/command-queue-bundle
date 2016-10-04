@@ -7,8 +7,11 @@ use Gendoria\CommandQueue\Command\CommandInterface;
 use Gendoria\CommandQueue\CommandProcessor\CommandProcessorInterface;
 use Gendoria\CommandQueue\ProcessorFactoryInterface;
 use Gendoria\CommandQueue\Worker\BaseWorker;
+use Gendoria\CommandQueueBundle\Event\QueueBeforeGetProcessorEvent;
+use Gendoria\CommandQueueBundle\Event\QueueBeforeTranslateEvent;
 use Gendoria\CommandQueueBundle\Event\QueueEvents;
-use Gendoria\CommandQueueBundle\Event\QueueWorkerRunEvent;
+use Gendoria\CommandQueueBundle\Event\QueueProcessErrorEvent;
+use Gendoria\CommandQueueBundle\Event\QueueProcessEvent;
 use Monolog\Handler\FingersCrossedHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
@@ -53,8 +56,26 @@ abstract class BaseSymfonyWorker extends BaseWorker
     {
         parent::beforeTranslateHook($commandData);
 
-        $this->eventDispatcher->dispatch(QueueEvents::WORKER_RUN_BEFORE_TRANSLATE, new QueueWorkerRunEvent($this, $this->getSubsystemName()));
+        $this->eventDispatcher->dispatch(QueueEvents::WORKER_RUN_BEFORE_TRANSLATE, new QueueBeforeTranslateEvent($this, $commandData, $this->getSubsystemName()));
         $this->clearLogs();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    protected function beforeGetProcessorHook(CommandInterface $command)
+    {
+        parent::beforeGetProcessorHook($command);
+        $this->eventDispatcher->dispatch(QueueEvents::WORKER_RUN_BEFORE_GET_PROCESSOR, new QueueBeforeGetProcessorEvent($this, $command, $this->getSubsystemName()));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function beforeProcessHook(CommandInterface $command, CommandProcessorInterface $processor)
+    {
+        parent::beforeProcessHook($command, $processor);
+        $this->eventDispatcher->dispatch(QueueEvents::WORKER_RUN_BEFORE_PROCESS, new QueueProcessEvent($this, $command, $processor, $this->getSubsystemName()));
     }
 
     /**
@@ -63,7 +84,7 @@ abstract class BaseSymfonyWorker extends BaseWorker
     protected function afterProcessHook(CommandInterface $command, CommandProcessorInterface $processor)
     {
         parent::afterProcessHook($command, $processor);
-        $this->eventDispatcher->dispatch(QueueEvents::WORKER_RUN_AFTER_PROCESS, new QueueWorkerRunEvent($this, $this->getSubsystemName()));
+        $this->eventDispatcher->dispatch(QueueEvents::WORKER_RUN_AFTER_PROCESS, new QueueProcessEvent($this, $command, $processor, $this->getSubsystemName()));
         $this->clearLogs();
     }
 
@@ -73,7 +94,7 @@ abstract class BaseSymfonyWorker extends BaseWorker
     protected function processorErrorHook(CommandInterface $command, CommandProcessorInterface $processor, Exception $e)
     {
         parent::processorErrorHook($command, $processor, $e);
-        $this->eventDispatcher->dispatch(QueueEvents::WORKER_RUN_PROCESSOR_ERROR, new QueueWorkerRunEvent($this, $this->getSubsystemName()));
+        $this->eventDispatcher->dispatch(QueueEvents::WORKER_RUN_PROCESSOR_ERROR, new QueueProcessErrorEvent($this, $command, $processor, $e, $this->getSubsystemName()));
     }
 
     /**
