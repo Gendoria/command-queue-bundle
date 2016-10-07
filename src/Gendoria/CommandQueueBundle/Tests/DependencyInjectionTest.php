@@ -184,7 +184,13 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
     {
         $tags = $definition->getTag(PoolsPass::QUEUE_MANAGER_TAG);
         if (!$poolsValid) {
-            $invalidPool = !empty($tags[0]['pool']) ? $tags[0]['pool'] : 'default';
+            $invalidPool = '';
+            foreach ($tags as $tag) {
+                if (!empty($tag['pool']) && $tag['pool'] !== 'default') {
+                    $invalidPool = $tag['pool'];
+                    break;
+                }
+            }
             $this->setExpectedException(InvalidArgumentException::class, sprintf(
                 'Service "%s" requests non existing queue pool "%s".',
                 'single',
@@ -196,11 +202,20 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
         $sendDriverMock = $this->getMockBuilder(SendDriverInterface::class)->getMock();
         $config = array(
             'pools' => array(
+                'default' => array(
+                    'send_driver' => '@dummy_default',
+                )
             ),
         );
+        $container->addDefinitions(array(
+            'dummy_default' => new Definition(get_class($sendDriverMock)),
+        ));
         if ($poolsValid) {
             foreach ($tags as $tag) {
                 $poolName = !empty($tag['pool']) ? $tag['pool'] : 'default';
+                if ($poolName == 'default') {
+                    continue;
+                }
                 $config['pools'][$poolName] = array(
                     'send_driver' => '@dummy_'.$poolName,
                 );
@@ -230,9 +245,9 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
         $definitionNonDefaultPool->addTag(PoolsPass::QUEUE_MANAGER_TAG);
         $definitionNonDefaultPool->addTag(PoolsPass::QUEUE_MANAGER_TAG, array('pool' => 'newpool'));
         return array(
-            array($definitionDefaultPool, 'default'),
-            array($definitionNonDefaultPool, 'newpool'),
-            array($definitionNonDefaultPool, 'newpool', false),
+            array($definitionDefaultPool),
+            array($definitionNonDefaultPool),
+            array($definitionNonDefaultPool, false),
         );
     }    
     
