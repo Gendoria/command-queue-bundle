@@ -8,6 +8,7 @@ namespace Gendoria\CommandQueueBundle\Tests;
 
 use Gendoria\CommandQueue\QueueManager\MultipleQueueManager;
 use Gendoria\CommandQueue\QueueManager\MultipleQueueManagerInterface;
+use Gendoria\CommandQueue\QueueManager\NullQueueManager;
 use Gendoria\CommandQueue\QueueManager\QueueManagerInterface;
 use Gendoria\CommandQueue\SendDriver\SendDriverInterface;
 use Gendoria\CommandQueueBundle\DependencyInjection\GendoriaCommandQueueExtension;
@@ -30,6 +31,21 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class DependencyInjectionTest extends PHPUnit_Framework_TestCase
 {
+    public function testNotEnabled()
+    {
+        $container = new ContainerBuilder();
+        $extension = new GendoriaCommandQueueExtension();
+        $config = array(
+            'enable' => false,
+        );
+        $extension->load(array($config), $container);
+        $container->compile();
+
+        /* @var $manager MultipleQueueManager */
+        $manager = $container->get('gendoria_command_queue.manager');
+        $this->assertInstanceOf(NullQueueManager::class, $manager);
+    }
+    
     public function testHasDefaultPool()
     {
         $container = new ContainerBuilder();
@@ -112,6 +128,26 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
         $container->addCompilerPass(new CommandProcessorPass());
         $container->compile();
     }    
+    
+    public function testIncorrectRoutes()
+    {
+        $this->setExpectedException(InvalidArgumentException::class, 'Pool "nonExistingPool" required in command routing is not present.');
+        $container = new ContainerBuilder();
+        $extension = new GendoriaCommandQueueExtension();
+        $sendDriverMock = $this->getMockBuilder(SendDriverInterface::class)->getMock();
+        $config = array(
+            'pools' => array(
+                'default' => array(
+                    'send_driver' => '@dummy',
+                ),
+            ),
+            'routes' => array(
+                'dummyClass' => 'nonExistingPool',
+            ),
+        );
+        $extension->load(array($config), $container);
+        $container->compile();
+    }
     
     /**
      * @dataProvider getSingleQueueManagerDefinition

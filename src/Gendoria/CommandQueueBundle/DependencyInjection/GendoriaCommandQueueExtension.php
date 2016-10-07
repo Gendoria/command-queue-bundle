@@ -65,7 +65,7 @@ class GendoriaCommandQueueExtension extends Extension
         //Inject command routing to default manager
         foreach ($config['routes'] as $commandExpression => $poolName) {
             if (!in_array($poolName, $poolNames)) {
-                throw new InvalidArgumentException(sprintf("Pool \"%s\" required in command routing is not present", $poolName));
+                throw new InvalidArgumentException(sprintf("Pool \"%s\" required in command routing is not present.", $poolName));
             }
             $managerDefinition->addMethodCall('addCommandRoute', array($commandExpression, $poolName));
         }

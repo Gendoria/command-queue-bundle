@@ -38,40 +38,47 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root($this->alias);
-        $rootNode->children()
-            ->scalarNode('enable')
-                ->defaultTrue()
-            ->end()
-            ->arrayNode('pools')
-                ->isRequired()
-                ->requiresAtLeastOneElement()
-                ->validate()
-                ->ifTrue(function (array $value) {
-                        return !array_key_exists('default', $value);
+        $rootNode
+            ->validate()
+                ->ifTrue(function($v) {
+                    return !empty($v['enable']) && empty($v['pools']);
                 })
-                    ->thenInvalid('Default service not present')
+                ->thenInvalid('The child node "pools" at path "'.$this->alias.'" must be configured.')
+            ->end()
+            ->children()
+                ->scalarNode('enable')
+                    ->defaultTrue()
                 ->end()
-                ->prototype('array')
-                    ->children()
-                        ->scalarNode('send_driver')
-                            ->isRequired()
-                            ->validate()
-                            ->ifTrue(function ($value) {
-                                    return !preg_match('/^@[a-zA-Z\.\-0-9\_]+$/', $value);
-                            })
-                                ->thenInvalid('Malformed service ID "%s"')
+                ->arrayNode('pools')
+                    ->requiresAtLeastOneElement()
+                    ->validate()
+                    ->ifTrue(function (array $value) {
+                            return !array_key_exists('default', $value);
+                    })
+                        ->thenInvalid('Default service not present')
+                    ->end()
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('send_driver')
+                                ->isRequired()
+                                ->validate()
+                                ->ifTrue(function ($value) {
+                                        return !preg_match('/^@[a-zA-Z\.\-0-9\_]+$/', $value);
+                                })
+                                    ->thenInvalid('Malformed service ID "%s"')
+                                ->end()
                             ->end()
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-            ->arrayNode('routes')
-                ->normalizeKeys(false)
-                ->prototype('scalar')
-                    ->isRequired()
+                ->arrayNode('routes')
+                    ->normalizeKeys(false)
+                    ->prototype('scalar')
+                        ->isRequired()
+                    ->end()
                 ->end()
             ->end()
-        ->end();
+            ;
 
         return $treeBuilder;
     }
