@@ -11,7 +11,9 @@
 
 namespace Gendoria\CommandQueueBundle\DependencyInjection\Pass;
 
+use Gendoria\CommandQueue\CommandProcessor\CommandProcessorInterface;
 use InvalidArgumentException;
+use ReflectionClass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -69,6 +71,10 @@ class CommandProcessorPass implements CompilerPassInterface
 
             if ($def->isAbstract()) {
                 throw new InvalidArgumentException(sprintf('The service "%s" must not be abstract as services are lazy-loaded.', $id));
+            }
+            $refl = new ReflectionClass($def->getClass());
+            if (!$refl->implementsInterface(CommandProcessorInterface::class)) {
+                throw new InvalidArgumentException(sprintf('The service "%s" has to implement '.CommandProcessorInterface::class.'.', $id));
             }
             foreach ($tags as $attributes) {
                 if (empty($attributes['command'])) {
