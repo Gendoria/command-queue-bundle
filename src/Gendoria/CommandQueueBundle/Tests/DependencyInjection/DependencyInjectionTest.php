@@ -7,9 +7,7 @@
 namespace Gendoria\CommandQueueBundle\Tests\DependencyInjection;
 
 use Gendoria\CommandQueue\QueueManager\MultipleQueueManager;
-use Gendoria\CommandQueue\QueueManager\MultipleQueueManagerInterface;
 use Gendoria\CommandQueue\QueueManager\NullQueueManager;
-use Gendoria\CommandQueue\QueueManager\QueueManagerInterface;
 use Gendoria\CommandQueue\SendDriver\SendDriverInterface;
 use Gendoria\CommandQueueBundle\DependencyInjection\GendoriaCommandQueueExtension;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\CommandProcessorPass;
@@ -57,6 +55,9 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
                     'send_driver' => '@dummy',
                 ),
             ),
+            'routes' => array(
+                'Command' => 'default'
+            )
         );
         $container->addDefinitions(array(
             'dummy' => new Definition(get_class($sendDriverMock)),

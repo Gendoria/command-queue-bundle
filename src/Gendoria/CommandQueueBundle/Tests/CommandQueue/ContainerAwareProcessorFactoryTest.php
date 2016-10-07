@@ -3,6 +3,7 @@
 namespace Gendoria\CommandQueueBundle\Tests\CommandQueue;
 
 use Gendoria\CommandQueue\Command\CommandInterface;
+use Gendoria\CommandQueue\Exception\MultipleProcessorsException;
 use Gendoria\CommandQueueBundle\CommandQueue\ContainerAwareProcessorFactory;
 use Gendoria\CommandQueueBundle\Tests\Fixtures\DummyCommandProcessor;
 use PHPUnit_Framework_TestCase;
@@ -30,6 +31,16 @@ class ContainerAwareProcessorFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($factory->hasProcessor('Command'));
     }
     
+    public function testRegisterProcessorIdforCommandMultipleProcessors()
+    {
+        $this->setExpectedException(MultipleProcessorsException::class);
+        $container = new ContainerBuilder();
+        $container->compile();
+        $factory = new ContainerAwareProcessorFactory($container);
+        $factory->registerProcessorIdForCommand('Command', 'service');
+        $factory->registerProcessorIdForCommand('Command', 'service');
+    }
+     
     public function testHasProcessor()
     {
         $container = new ContainerBuilder();
@@ -51,5 +62,16 @@ class ContainerAwareProcessorFactoryTest extends PHPUnit_Framework_TestCase
         $factory->registerProcessorIdForCommand(get_class($command), 'service');
         $this->assertTrue($factory->hasProcessor(get_class($command)));
         $this->assertInstanceOf(DummyCommandProcessor::class, $factory->getProcessor($command));
+    }
+    
+    public function testGetProcessorNoProcessor()
+    {
+        $command = $this->getMockBuilder(CommandInterface::class)->getMock();
+        $this->setExpectedException(\InvalidArgumentException::class, 'No processor registered for given type: '.get_class($command).'.', 500);
+        $container = new ContainerBuilder();
+        
+        $container->compile();
+        $factory = new ContainerAwareProcessorFactory($container);
+        $factory->getProcessor($command);
     }
 }

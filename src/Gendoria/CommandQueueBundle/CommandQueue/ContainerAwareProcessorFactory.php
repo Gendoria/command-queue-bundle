@@ -79,7 +79,7 @@ class ContainerAwareProcessorFactory extends ProcessorFactory
             return parent::getProcessor($command);
         } catch (ProcessorNotFoundException $ex) {
             if (!array_key_exists($className, $this->serviceIds)) {
-                throw new InvalidArgumentException('No processor registered for given type: '.$className, 500, $ex);
+                throw new InvalidArgumentException('No processor registered for given type: '.$className.'.', 500, $ex);
             }
             $this->registerProcessorForCommand($className, $this->container->get($this->serviceIds[$className]));
         }
