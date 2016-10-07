@@ -24,15 +24,21 @@ class GendoriaCommandQueueBundleTest extends PHPUnit_Framework_TestCase
     
     public function testBuild()
     {
-        $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
-        $container->expects($this->exactly(2))
-            ->method('addCompilerPass')
-            ->withConsecutive(
-                array($this->isInstanceOf(CommandProcessorPass::class)),
-                array($this->isInstanceOf(PoolsPass::class))
-            );
+        $container = new ContainerBuilder();
         
         $bundle = new GendoriaCommandQueueBundle();
         $bundle->build($container);
+        $passes = $container->getCompilerPassConfig()->getPasses();
+        $hasPoolsPass = false;
+        $hasCommandProcessorPass = false;
+        foreach ($passes as $pass) {
+            if ($pass instanceof CommandProcessorPass) {
+                $hasCommandProcessorPass = true;
+            } elseif ($pass instanceof PoolsPass) {
+                $hasPoolsPass = true;
+            }
+        }
+        $this->assertTrue($hasCommandProcessorPass, "Command processors pass should have been registered.");
+        $this->assertTrue($hasPoolsPass, "Pools pass should have been registered.");
     }
 }
