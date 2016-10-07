@@ -16,12 +16,14 @@ use InvalidArgumentException;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Compiler pass to register tagged services for an event dispatcher.
  */
 class CommandProcessorPass implements CompilerPassInterface
 {
+
     /**
      * Command processor factory service ID.
      *
@@ -65,17 +67,7 @@ class CommandProcessorPass implements CompilerPassInterface
 
         foreach ($container->findTaggedServiceIds($this->listenerTag) as $id => $tags) {
             $def = $container->getDefinition($id);
-            if (!$def->isPublic()) {
-                throw new InvalidArgumentException(sprintf('The service "%s" must be public as services are lazy-loaded.', $id));
-            }
-
-            if ($def->isAbstract()) {
-                throw new InvalidArgumentException(sprintf('The service "%s" must not be abstract as services are lazy-loaded.', $id));
-            }
-            $refl = new ReflectionClass($def->getClass());
-            if (!$refl->implementsInterface(CommandProcessorInterface::class)) {
-                throw new InvalidArgumentException(sprintf('The service "%s" has to implement '.CommandProcessorInterface::class.'.', $id));
-            }
+            $this->assertProcessorDefinition($def, $id);
             foreach ($tags as $attributes) {
                 if (empty($attributes['command'])) {
                     throw new InvalidArgumentException(sprintf('The service "%s" is tagged as processor without specifying "command" attribute', $id));
@@ -85,6 +77,21 @@ class CommandProcessorPass implements CompilerPassInterface
                     $id,
                 ));
             }
+        }
+    }
+
+    private function assertProcessorDefinition(Definition $def, $id)
+    {
+        if (!$def->isPublic()) {
+            throw new InvalidArgumentException(sprintf('The service "%s" must be public as services are lazy-loaded.', $id));
+        }
+
+        if ($def->isAbstract()) {
+            throw new InvalidArgumentException(sprintf('The service "%s" must not be abstract as services are lazy-loaded.', $id));
+        }
+        $refl = new ReflectionClass($def->getClass());
+        if (!$refl->implementsInterface(CommandProcessorInterface::class)) {
+            throw new InvalidArgumentException(sprintf('The service "%s" has to implement ' . CommandProcessorInterface::class . '.', $id));
         }
     }
 }
