@@ -45,9 +45,34 @@ class PoolsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        $this->setupPools($container);
+        
+        $pools = $container->getParameter('gendoria_command_queue.pools');
+
+        foreach ($container->findTaggedServiceIds(self::QUEUE_MANAGER_TAG) as $id => $tags) {
+            $def = $container->getDefinition($id);
+            $reflection = new ReflectionClass($def->getClass());
+            if ($reflection->implementsInterface(QueueManagerInterface::class)) {
+                $this->setupSingleQueueManager($id, $def, $tags, $pools);
+            } elseif ($reflection->implementsInterface(MultipleQueueManagerInterface::class)) {
+                $this->setupMultipleQueueManager($id, $def, $tags, $pools);
+            } else {
+                throw new InvalidArgumentException(sprintf('Service "%s" does not implement one of required interfaces.', $id));
+            }
+        }
+    }
+    
+    /**
+     * Setup pools.
+     * 
+     * @param ContainerBuilder $container
+     * @throws InvalidArgumentException
+     * @return void
+     */
+    private function setupPools(ContainerBuilder $container)
+    {
         $pools = $container->getParameter('gendoria_command_queue.pools');
         $usedServiceIds = array();
-
         foreach ($pools as $poolData) {
             $sendServiceId = substr($poolData['send_driver'], 1);
             if (in_array($sendServiceId, $usedServiceIds)) {
@@ -68,18 +93,6 @@ class PoolsPass implements CompilerPassInterface
                 ));
             }
             $usedServiceIds[] = $sendServiceId;
-        }
-
-        foreach ($container->findTaggedServiceIds(self::QUEUE_MANAGER_TAG) as $id => $tags) {
-            $def = $container->getDefinition($id);
-            $reflection = new ReflectionClass($def->getClass());
-            if ($reflection->implementsInterface(QueueManagerInterface::class)) {
-                $this->setupSingleQueueManager($id, $def, $tags, $pools);
-            } elseif ($reflection->implementsInterface(MultipleQueueManagerInterface::class)) {
-                $this->setupMultipleQueueManager($id, $def, $tags, $pools);
-            } else {
-                throw new InvalidArgumentException(sprintf('Service "%s" does not implement one of required interfaces.', $id));
-            }
         }
     }
 
