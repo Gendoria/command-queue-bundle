@@ -54,7 +54,6 @@ class CommandProcessorPassTest extends PHPUnit_Framework_TestCase
 
     public function getCorrect()
     {
-        $factoryDefinitionMock = $this->getMockBuilder(Definition::class)->getMock();
         $processor = $this->getMockBuilder(CommandProcessorInterface::class)->getMock();
         
         $singleCommandProcessor = new Definition(get_class($processor));
@@ -67,21 +66,21 @@ class CommandProcessorPassTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array(
-                    self::FACTORY_ID => $factoryDefinitionMock,
+                    self::FACTORY_ID => $this->getMockBuilder(Definition::class)->getMock(),
                     'service1' => $singleCommandProcessor,
                 ),
                 1
             ),
             array(
                 array(
-                    self::FACTORY_ID => $factoryDefinitionMock,
+                    self::FACTORY_ID => $this->getMockBuilder(Definition::class)->getMock(),
                     'service1' => $multipleCommandsProcessor,
                 ),
                 2
             ),
             array(
                 array(
-                    self::FACTORY_ID => $factoryDefinitionMock,
+                    self::FACTORY_ID => $this->getMockBuilder(Definition::class)->getMock(),
                     'service1' => $singleCommandProcessor,
                     'service2' => $multipleCommandsProcessor,
                 ),
