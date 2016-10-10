@@ -50,7 +50,7 @@ class JmsSerializerTest extends PHPUnit_Framework_TestCase
     public function testUnserializeSerializerException()
     {
         $this->setExpectedException(TranslateErrorException::class, 'Could not decode JSON, syntax error - malformed JSON.');
-        $serializedCommandData = new SerializedCommandData('', 'stdClass');
+        $serializedCommandData = new SerializedCommandData('--', 'stdClass');
         $serializer = SerializerBuilder::create()->build();
         $jmsSerializer = new JmsSerializer($serializer);
         $jmsSerializer->unserialize($serializedCommandData);

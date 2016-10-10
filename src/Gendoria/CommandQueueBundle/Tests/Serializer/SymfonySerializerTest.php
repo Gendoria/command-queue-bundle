@@ -48,7 +48,7 @@ class SymfonySerializerTest extends PHPUnit_Framework_TestCase
     public function testUnserializeSerializerException()
     {
         $this->setExpectedException(TranslateErrorException::class);
-        $serializedCommandData = new SerializedCommandData('', 'stdClass');
+        $serializedCommandData = new SerializedCommandData('--', 'stdClass');
         $encoder = new JsonEncoder();
         $normalizer = new ObjectNormalizer();
         $serializer = new Serializer(array($normalizer), array($encoder));
