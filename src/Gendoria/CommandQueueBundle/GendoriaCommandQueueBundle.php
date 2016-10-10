@@ -5,6 +5,7 @@ namespace Gendoria\CommandQueueBundle;
 use Gendoria\CommandQueueBundle\DependencyInjection\GendoriaCommandQueueExtension;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\CommandProcessorPass;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\PoolsPass;
+use Gendoria\CommandQueueBundle\DependencyInjection\Pass\RegisterSerializerDriversPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -41,5 +42,6 @@ class GendoriaCommandQueueBundle extends Bundle
     {
         $container->addCompilerPass(new CommandProcessorPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new PoolsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
+        $container->addCompilerPass(new RegisterSerializerDriversPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
     }
 }

@@ -54,27 +54,7 @@ class GendoriaCommandQueueExtension extends Extension
             $managerDefinition = $container->getDefinition('gendoria_command_queue.manager');
             $managerDefinition->setClass(NullQueueManager::class);
         }
-        $this->loadSerializerDrivers($container);
         $this->setupManagers($config, $container);
-    }
-    
-    private function loadSerializerDrivers(ContainerBuilder $container)
-    {
-        $definitions = array(
-            'gendoria_command_queue.serializer.null' => new Definition(NullSerializer::class),
-        );
-            
-        if (class_exists(Serializer::class)) {
-            $definition = new Definition(SymfonySerializer::class);
-            $definition->addArgument(new Reference('serializer'));
-            $definitions['gendoria_command_queue.serializer.symfony'] = $definition;
-        }
-        if (class_exists(JMSSerializerBundle::class)) {
-            $definition = new Definition(JmsSerializer::class);
-            $definition->addArgument(new Reference('jms_serializer'));
-            $definitions['gendoria_command_queue.serializer.jms'] = $definition;
-        }
-        $container->addDefinitions($definitions);
     }
     
     private function setupManagers($config, ContainerBuilder $container)
