@@ -6,6 +6,7 @@ use Exception;
 use Gendoria\CommandQueue\Command\CommandInterface;
 use Gendoria\CommandQueue\CommandProcessor\CommandProcessorInterface;
 use Gendoria\CommandQueue\ProcessorFactoryInterface;
+use Gendoria\CommandQueue\Serializer\SerializerInterface;
 use Gendoria\CommandQueue\Worker\BaseWorker;
 use Gendoria\CommandQueueBundle\Event\QueueBeforeGetProcessorEvent;
 use Gendoria\CommandQueueBundle\Event\QueueBeforeTranslateEvent;
@@ -34,9 +35,9 @@ abstract class BaseSymfonyWorker extends BaseWorker
      */
     private $eventDispatcher;
     
-    public function __construct(ProcessorFactoryInterface $processorFactory, EventDispatcherInterface $eventDispatcher, LoggerInterface $logger = null)
+    public function __construct(ProcessorFactoryInterface $processorFactory, SerializerInterface $serializer, EventDispatcherInterface $eventDispatcher, LoggerInterface $logger = null)
     {
-        parent::__construct($processorFactory, $logger);
+        parent::__construct($processorFactory, $serializer, $logger);
         $this->eventDispatcher = $eventDispatcher;
     }
 

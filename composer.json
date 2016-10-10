@@ -25,9 +25,13 @@
         "gendoria/command-queue": "dev-master"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": ">=2.7.0"
+        "symfony/phpunit-bridge": ">=2.7.0",
+        "symfony/serializer": ">=2.7.0",
+        "symfony/property-access": ">=2.7.0",
+        "symfony/property-info": ">=2.7.0"
     },
     "suggest": {
+        "symfony/serializer": "Allows serialization using Symfony serializer component."
     },
     "autoload": {
         "psr-4": {

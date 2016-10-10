@@ -9,9 +9,11 @@
 namespace Gendoria\CommandQueueBundle\Tests\Fixtures;
 
 use Gendoria\CommandQueue\ProcessorFactoryInterface;
+use Gendoria\CommandQueue\Serializer\NullSerializer;
+use Gendoria\CommandQueue\Serializer\SerializedCommandData;
+use Gendoria\CommandQueue\Worker\Exception\TranslateErrorException;
 use Gendoria\CommandQueueBundle\Worker\BaseSymfonyWorker;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -29,25 +31,18 @@ class DummySymfonyWorker extends BaseSymfonyWorker
     
     public function __construct(ProcessorFactoryInterface $processorFactory, EventDispatcherInterface $eventDispatcher, LoggerInterface $logger = null, $translateFailure = false)
     {
-        parent::__construct($processorFactory, $eventDispatcher, $logger);
+        $serializer = new NullSerializer();
+        parent::__construct($processorFactory, $serializer, $eventDispatcher, $logger);
         $this->translateFailure = (bool)$translateFailure;
     }
     
-    /**
-     * Implementation of translate command method.
-     * 
-     * @param mixed $commandData
-     * @return DummyCommand
-     * @throws Exception
-     */
-    protected function translateCommand($commandData)
+    protected function getSerializedCommandData($commandData)
     {
         if ($this->translateFailure) {
-            throw new Exception("Dummy exception");
+            throw new TranslateErrorException("Dummy exception");
         }
-        
-        return new DummyCommand($commandData);
-    }
+        return new SerializedCommandData(new DummyCommand($commandData), DummyCommand::class);
+    }    
 
     /**
      * Implementation of get subsystem name method.
@@ -58,5 +53,4 @@ class DummySymfonyWorker extends BaseSymfonyWorker
     {
         return 'test';
     }
-
 }
