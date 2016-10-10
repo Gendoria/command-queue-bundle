@@ -29,7 +29,8 @@
         "symfony/serializer": ">=2.7.0",
         "symfony/property-access": ">=2.7.0",
         "symfony/property-info": ">=2.7.0",
-        "jms/serializer": "dev-master"
+        "jms/serializer": "dev-master",
+        "jms/serializer-bundle": "dev-master"
     },
     "suggest": {
         "symfony/serializer": "Allows serialization using Symfony serializer component.",

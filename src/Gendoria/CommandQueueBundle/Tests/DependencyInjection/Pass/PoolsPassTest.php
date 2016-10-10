@@ -1,15 +1,10 @@
 <?php
 
-/**
- * All rights reserved
- */
-
 namespace Gendoria\CommandQueueBundle\Tests\DependencyInjection\Pass;
 
 use Gendoria\CommandQueue\QueueManager\MultipleQueueManagerInterface;
 use Gendoria\CommandQueue\QueueManager\QueueManagerInterface;
 use Gendoria\CommandQueue\SendDriver\SendDriverInterface;
-use Gendoria\CommandQueueBundle\DependencyInjection\GendoriaCommandQueueExtension;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\PoolsPass;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
@@ -42,17 +37,14 @@ class PoolsPassTest extends PHPUnit_Framework_TestCase
             $this->setExpectedException(InvalidArgumentException::class, 'Only single ' . PoolsPass::QUEUE_MANAGER_TAG . ' tag possible on service single.');
         }
         $container = new ContainerBuilder();
-        $extension = new GendoriaCommandQueueExtension();
         $sendDriverMock = $this->getMockBuilder(SendDriverInterface::class)->getMock();
-        $config = array(
-            'pools' => array(
-                'default' => array(
-                    'send_driver' => '@dummy',
-                ),
+        $pools = array(
+            'default' => array(
+                'send_driver' => '@dummy',
             ),
         );
         if ($poolName !== 'default' && $poolValid) {
-            $config['pools'][$poolName] = array(
+            $pools[$poolName] = array(
                 'send_driver' => '@dummy1',
             );
             $container->addDefinitions(array(
@@ -63,9 +55,9 @@ class PoolsPassTest extends PHPUnit_Framework_TestCase
             'dummy' => new Definition(get_class($sendDriverMock)),
             'single' => $definition,
         ));
-        $extension->load(array($config), $container);
-        $container->addCompilerPass(new PoolsPass());
-        $container->compile();
+        $container->setParameter('gendoria_command_queue.pools', $pools);
+        $poolsPass = new PoolsPass();
+        $poolsPass->process($container);
     }
     
     /**
@@ -110,14 +102,11 @@ class PoolsPassTest extends PHPUnit_Framework_TestCase
             ));
         }
         $container = new ContainerBuilder();
-        $extension = new GendoriaCommandQueueExtension();
         $sendDriverMock = $this->getMockBuilder(SendDriverInterface::class)->getMock();
-        $config = array(
-            'pools' => array(
-                'default' => array(
-                    'send_driver' => '@dummy_default',
-                )
-            ),
+        $pools = array(
+            'default' => array(
+                'send_driver' => '@dummy_default',
+            )
         );
         $container->addDefinitions(array(
             'dummy_default' => new Definition(get_class($sendDriverMock)),
@@ -128,7 +117,7 @@ class PoolsPassTest extends PHPUnit_Framework_TestCase
                 if ($poolName == 'default') {
                     continue;
                 }
-                $config['pools'][$poolName] = array(
+                $pools[$poolName] = array(
                     'send_driver' => '@dummy_'.$poolName,
                 );
                 $container->addDefinitions(array(
@@ -136,12 +125,12 @@ class PoolsPassTest extends PHPUnit_Framework_TestCase
                 ));
             }
         }
+        $container->setParameter('gendoria_command_queue.pools', $pools);
         $container->addDefinitions(array(
             'single' => $definition,
         ));
-        $extension->load(array($config), $container);
-        $container->addCompilerPass(new PoolsPass());
-        $container->compile();
+        $poolsPass = new PoolsPass();
+        $poolsPass->process($container);
     }
     
     /**
@@ -166,17 +155,13 @@ class PoolsPassTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(InvalidArgumentException::class, 'Non existing send driver service provided: @dummy.');
         $container = new ContainerBuilder();
-        $extension = new GendoriaCommandQueueExtension();
-        $config = array(
-            'pools' => array(
-                'default' => array(
-                    'send_driver' => '@dummy',
-                ),
-            ),
-        );
-        $extension->load(array($config), $container);
-        $container->addCompilerPass(new PoolsPass());
-        $container->compile();
+        $container->setParameter('gendoria_command_queue.pools', array(
+            'default' => array(
+                'send_driver' => '@dummy',
+            )
+        ));
+        $poolsPass = new PoolsPass();
+        $poolsPass->process($container);
     }
     
     public function testInvalidSendDriverInvalidInterface()
@@ -184,19 +169,15 @@ class PoolsPassTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException(InvalidArgumentException::class, 'Service "dummy" does not implement interface "'.SendDriverInterface::class.'".');
         $container = new ContainerBuilder();
         $sendDriverMock = $this->getMockBuilder(stdClass::class)->getMock();
-        $extension = new GendoriaCommandQueueExtension();
-        $config = array(
-            'pools' => array(
-                'default' => array(
-                    'send_driver' => '@dummy',
-                ),
-            ),
-        );
         $container->addDefinitions(array(
             'dummy' => new Definition(get_class($sendDriverMock)),
         ));
-        $extension->load(array($config), $container);
-        $container->addCompilerPass(new PoolsPass());
-        $container->compile();
+        $container->setParameter('gendoria_command_queue.pools', array(
+            'default' => array(
+                'send_driver' => '@dummy',
+            )
+        ));
+        $poolsPass = new PoolsPass();
+        $poolsPass->process($container);
     }
 }

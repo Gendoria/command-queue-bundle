@@ -29,6 +29,12 @@ class SymfonySerializer implements SerializerInterface
      */
     private $format;
     
+    /**
+     * Class constructor.
+     * 
+     * @param Serializer $serializer
+     * @param string $format Serialization format.
+     */
     public function __construct(Serializer $serializer, $format = "json")
     {
         $this->serializer = $serializer;

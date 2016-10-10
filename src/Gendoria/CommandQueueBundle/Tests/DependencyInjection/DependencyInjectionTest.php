@@ -13,12 +13,14 @@ use Gendoria\CommandQueueBundle\DependencyInjection\GendoriaCommandQueueExtensio
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\CommandProcessorPass;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\PoolsPass;
 use InvalidArgumentException;
+use JMS\Serializer\Serializer as JmsSerializerClass;
 use PHPUnit_Framework_TestCase;
 use ReflectionObject;
 use stdClass;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\Serializer\Serializer as SymfonySerializerClass;
 
 /**
  * Description of ManagerTest
@@ -32,6 +34,10 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
     public function testNotEnabled()
     {
         $container = new ContainerBuilder();
+        $container->addDefinitions(array(
+            'serializer' => new Definition(SymfonySerializerClass::class),
+            'jms_serializer' => new Definition(JmsSerializerClass::class),
+        ));
         $extension = new GendoriaCommandQueueExtension();
         $config = array(
             'enable' => false,
@@ -47,6 +53,10 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
     public function testHasDefaultPool()
     {
         $container = new ContainerBuilder();
+        $container->addDefinitions(array(
+            'serializer' => new Definition(SymfonySerializerClass::class),
+            'jms_serializer' => new Definition(JmsSerializerClass::class),
+        ));
         $extension = new GendoriaCommandQueueExtension();
         $sendDriverMock = $this->getMockBuilder(SendDriverInterface::class)->getMock();
         $config = array(
