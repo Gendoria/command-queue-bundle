@@ -2,19 +2,18 @@
 
 namespace Gendoria\CommandQueueBundle\Serializer;
 
-use Exception;
 use Gendoria\CommandQueue\Command\CommandInterface;
 use Gendoria\CommandQueue\Serializer\SerializedCommandData;
 use Gendoria\CommandQueue\Serializer\SerializerInterface;
 use Gendoria\CommandQueue\Worker\Exception\TranslateErrorException;
-use Symfony\Component\Serializer\Serializer;
+use JMS\Serializer\Serializer;
 
 /**
- * Description of SymfonySerializer
+ * Serializer using JMS serializer module
  *
  * @author Tomasz Struczyński <t.struczynski@gmail.com>
  */
-class SymfonySerializer implements SerializerInterface
+class JmsSerializer implements SerializerInterface
 {
     /**
      *
@@ -35,16 +34,22 @@ class SymfonySerializer implements SerializerInterface
         $this->format = $format;
     }
     
+    /**
+     * {@inheritdoc}
+     */
     public function serialize(CommandInterface $command)
     {
         return new SerializedCommandData($this->serializer->serialize($command, $this->format), get_class($command));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function unserialize(SerializedCommandData $serializedCommandData)
     {
         try {
             $command = $this->serializer->deserialize($serializedCommandData->getSerializedCommand(), $serializedCommandData->getCommandClass(), $this->format);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new TranslateErrorException($serializedCommandData, $e->getMessage(), $e->getCode(), $e);
         }
         if (!is_object($command) || !$command instanceof CommandInterface) {
@@ -52,5 +57,4 @@ class SymfonySerializer implements SerializerInterface
         }
         return $command;
     }
-
 }

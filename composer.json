@@ -28,10 +28,12 @@
         "symfony/phpunit-bridge": ">=2.7.0",
         "symfony/serializer": ">=2.7.0",
         "symfony/property-access": ">=2.7.0",
-        "symfony/property-info": ">=2.7.0"
+        "symfony/property-info": ">=2.7.0",
+        "jms/serializer": "dev-master"
     },
     "suggest": {
-        "symfony/serializer": "Allows serialization using Symfony serializer component."
+        "symfony/serializer": "Allows serialization using Symfony serializer component.",
+        "jms/serializer-bundle": "Allows serialization using JMS Serializer library."
     },
     "autoload": {
         "psr-4": {

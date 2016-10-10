@@ -16,13 +16,13 @@ use JMS\Serializer\Annotation\Type;
  *
  * @author Tomasz Struczyński <t.struczynski@gmail.com>
  */
-class DummyCommand implements CommandInterface
+class DummyInvalidJmsCommand implements CommandInterface
 {
     /**
      * Command data passed to translator.
      * 
      * @var mixed
-     * @Type("string")
+     * @Type("object")
      */
     public $commandData;
     
