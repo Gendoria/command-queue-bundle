@@ -4,6 +4,7 @@ namespace Gendoria\CommandQueueBundle\DependencyInjection;
 
 use Gendoria\CommandQueue\QueueManager\NullQueueManager;
 use Gendoria\CommandQueue\QueueManager\SimpleQueueManager;
+use Gendoria\CommandQueue\Serializer\NullSerializer;
 use Gendoria\CommandQueueBundle\Serializer\JmsSerializer;
 use Gendoria\CommandQueueBundle\Serializer\SymfonySerializer;
 use InvalidArgumentException;
@@ -59,16 +60,21 @@ class GendoriaCommandQueueExtension extends Extension
     
     private function loadSerializerDrivers(ContainerBuilder $container)
     {
+        $definitions = array(
+            'gendoria_command_queue.serializer.null' => new Definition(NullSerializer::class),
+        );
+            
         if (class_exists(Serializer::class)) {
             $definition = new Definition(SymfonySerializer::class);
             $definition->addArgument(new Reference('serializer'));
-            $container->addDefinitions(array('gendoria_command_queue.serializer.symfony' => $definition));
+            $definitions['gendoria_command_queue.serializer.symfony'] = $definition;
         }
         if (class_exists(JMSSerializerBundle::class)) {
             $definition = new Definition(JmsSerializer::class);
             $definition->addArgument(new Reference('jms_serializer'));
-            $container->addDefinitions(array('gendoria_command_queue.serializer.jms' => $definition));
+            $definitions['gendoria_command_queue.serializer.jms'] = $definition;
         }
+        $container->addDefinitions($definitions);
     }
     
     private function setupManagers($config, ContainerBuilder $container)
