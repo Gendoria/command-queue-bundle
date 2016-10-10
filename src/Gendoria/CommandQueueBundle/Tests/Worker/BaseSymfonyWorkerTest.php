@@ -91,8 +91,6 @@ class BaseSymfonyWorkerTest extends PHPUnit_Framework_TestCase
             ->method('process')
             ->with($this->equalTo($expectedCommand))
             ->will($this->throwException(new Exception("Dummy")));
-        $logger->expects($this->never())
-            ->method('getHandlers');
         
         $eventDispatcher->expects($this->exactly(4))
             ->method('dispatch')
