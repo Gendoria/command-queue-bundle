@@ -20,7 +20,7 @@
 		<whitelist processUncoveredFilesFromWhitelist="true">
 			<directory suffix=".php">src/*</directory>
             <exclude>
-                <directory>./src/Gendoria/CommandQueueBundle/Tests/*</directory>
+                <directory>./src/Gendoria/CommandQueueBundle/Tests</directory>
             </exclude>            
 		</whitelist>
 	</filter>
