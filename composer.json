@@ -2,6 +2,7 @@
     "name": "gendoria/command-queue-bundle",
     "type": "symfony-bundle",
     "description": "Symfony bundle for Command Queue",
+    "keywords": ["worker", "backend", "queue", "command", "processing", "distributed processing"],
     "authors": [
         {
             "name": "Gendoria",

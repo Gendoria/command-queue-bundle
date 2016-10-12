@@ -77,7 +77,7 @@ gendoria_command_queue:
 
 Enabled property allows to enable or disable bundle (eg. on some environments like testing).
 
-Pools section describes abailable queue pools. It is required, when bundle is enabled. At least one pool, 
+Pools section describes available queue pools. It is required, when bundle is enabled. At least one pool, 
 named `default` has to be present.
 
 Pool configuration has only one parameter, `send_driver`. It describes, which method will be used 
@@ -331,6 +331,17 @@ Wildcard routes are less important, than simple routes on single class / interfa
 and / or interfaces come onto play, it becomes more complex and harder to tell. We advise to use routing 
 on most child classes, using wildcards, and not to create routing for base classes / interfaces, 
 unless absolutely necessary.
+
+### Send drivers
+
+Bundle can use arbitrary transportation mechanisms to send commands to command processors. 
+These mechanisms are called 'send drivers'.
+
+By default, bundle provides only direct processing driver service. It executes command right after it is send,
+on same process as sender. It does not serialize command prior sending, so no serialization configuration 
+is needed.
+
+Other send drivers (eg. one using RabbitMQ queue mechanism) are provided by separate bundles.
 
 ### Queue managers
 
