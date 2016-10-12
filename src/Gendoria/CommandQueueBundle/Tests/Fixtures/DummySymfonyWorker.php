@@ -9,9 +9,9 @@
 namespace Gendoria\CommandQueueBundle\Tests\Fixtures;
 
 use Gendoria\CommandQueue\ProcessorFactory\ProcessorFactoryInterface;
+use Gendoria\CommandQueue\Serializer\Exception\UnserializeErrorException;
 use Gendoria\CommandQueue\Serializer\NullSerializer;
 use Gendoria\CommandQueue\Serializer\SerializedCommandData;
-use Gendoria\CommandQueue\Worker\Exception\TranslateErrorException;
 use Gendoria\CommandQueueBundle\Worker\BaseSymfonyWorker;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -39,7 +39,7 @@ class DummySymfonyWorker extends BaseSymfonyWorker
     protected function getSerializedCommandData($commandData)
     {
         if ($this->translateFailure) {
-            throw new TranslateErrorException("Dummy exception");
+            throw new UnserializeErrorException("Dummy exception");
         }
         return new SerializedCommandData(new DummyCommand($commandData), DummyCommand::class);
     }    

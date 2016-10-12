@@ -3,12 +3,11 @@
 namespace Gendoria\CommandQueueBundle\Tests\Serializer;
 
 use Exception;
+use Gendoria\CommandQueue\Serializer\Exception\UnserializeErrorException;
 use Gendoria\CommandQueue\Serializer\SerializedCommandData;
-use Gendoria\CommandQueue\Worker\Exception\TranslateErrorException;
 use Gendoria\CommandQueueBundle\Serializer\SymfonySerializer;
 use Gendoria\CommandQueueBundle\Tests\Fixtures\DummyCommand;
 use PHPUnit_Framework_TestCase;
-use stdClass;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -47,7 +46,7 @@ class SymfonySerializerTest extends PHPUnit_Framework_TestCase
     
     public function testUnserializeSerializerException()
     {
-        $this->setExpectedException(TranslateErrorException::class);
+        $this->setExpectedException(UnserializeErrorException::class);
         $serializedCommandData = new SerializedCommandData('--', 'stdClass');
         $encoder = new JsonEncoder();
         $normalizer = new ObjectNormalizer();
@@ -59,7 +58,7 @@ class SymfonySerializerTest extends PHPUnit_Framework_TestCase
     
     public function testUnserializeCommandClassException()
     {
-        $this->setExpectedException(TranslateErrorException::class, 'Unserialized command should implement CommandInterface.');
+        $this->setExpectedException(UnserializeErrorException::class, 'Unserialized command should implement CommandInterface.');
         $serializedCommandData = new SerializedCommandData('[]', 'stdClass');
         $encoder = new JsonEncoder();
         $normalizer = new ObjectNormalizer();

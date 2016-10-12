@@ -9,8 +9,8 @@
 namespace Gendoria\CommandQueueBundle\Tests\Serializer;
 
 use Exception;
+use Gendoria\CommandQueue\Serializer\Exception\UnserializeErrorException;
 use Gendoria\CommandQueue\Serializer\SerializedCommandData;
-use Gendoria\CommandQueue\Worker\Exception\TranslateErrorException;
 use Gendoria\CommandQueueBundle\Serializer\JmsSerializer;
 use Gendoria\CommandQueueBundle\Tests\Fixtures\DummyCommand;
 use Gendoria\CommandQueueBundle\Tests\Fixtures\DummyInvalidJmsCommand;
@@ -49,7 +49,7 @@ class JmsSerializerTest extends PHPUnit_Framework_TestCase
     
     public function testUnserializeSerializerException()
     {
-        $this->setExpectedException(TranslateErrorException::class, 'Could not decode JSON, syntax error - malformed JSON.');
+        $this->setExpectedException(UnserializeErrorException::class, 'Could not decode JSON, syntax error - malformed JSON.');
         $serializedCommandData = new SerializedCommandData('--', 'stdClass');
         $serializer = SerializerBuilder::create()->build();
         $jmsSerializer = new JmsSerializer($serializer);
@@ -58,7 +58,7 @@ class JmsSerializerTest extends PHPUnit_Framework_TestCase
     
     public function testUnserializeCommandClassException()
     {
-        $this->setExpectedException(TranslateErrorException::class, 'Unserialized command should implement CommandInterface.');
+        $this->setExpectedException(UnserializeErrorException::class, 'Unserialized command should implement CommandInterface.');
         $serializedCommandData = new SerializedCommandData('[]', 'stdClass');
         $serializer = SerializerBuilder::create()->build();
         $jmsSerializer = new JmsSerializer($serializer);
