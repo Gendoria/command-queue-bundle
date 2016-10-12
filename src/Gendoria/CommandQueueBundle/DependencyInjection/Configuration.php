@@ -41,12 +41,12 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->validate()
                 ->ifTrue(function($v) {
-                    return !empty($v['enable']) && empty($v['pools']);
+                    return !empty($v['enabled']) && empty($v['pools']);
                 })
                 ->thenInvalid('The child node "pools" at path "'.$this->alias.'" must be configured.')
             ->end()
             ->children()
-                ->scalarNode('enable')
+                ->scalarNode('enabled')
                     ->defaultTrue()
                 ->end()
                 ->arrayNode('pools')

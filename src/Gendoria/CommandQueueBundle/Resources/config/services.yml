@@ -11,3 +11,7 @@ services:
         arguments:
             - '@?logger'
             
+    gendoria_command_queue.driver.direct:
+        class: Gendoria\CommandQueue\SendDriver\DirectProcessingDriver
+        calls:
+            - [setLogger, ['@?logger']]

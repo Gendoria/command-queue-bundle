@@ -40,7 +40,7 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
         ));
         $extension = new GendoriaCommandQueueExtension();
         $config = array(
-            'enable' => false,
+            'enabled' => false,
         );
         $extension->load(array($config), $container);
         $container->compile();
