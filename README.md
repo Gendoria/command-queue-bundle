@@ -323,7 +323,7 @@ If you have class with inheritance `A -> B -> C`, where `A` is most base class a
 routing for `C` will be used. If no routing for `C` exists, manager considers routing for `B` and then `A`.
 If nothing is detected, `default` pool will be used.
 
-Additionally, you can use '*' in your route expression to indicate any string value. 
+Additionally, you can use `*` in your route expression to indicate any string value. 
 So, for example, if your expression is `*Something` it will match class `ASomething` and `BSomething`, but not
 `SomethingC`. Similary, expression `Example\Namespace\*` will match all commands in example namespace.
 
