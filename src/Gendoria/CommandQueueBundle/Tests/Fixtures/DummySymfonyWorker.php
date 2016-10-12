@@ -8,7 +8,7 @@
 
 namespace Gendoria\CommandQueueBundle\Tests\Fixtures;
 
-use Gendoria\CommandQueue\ProcessorFactoryInterface;
+use Gendoria\CommandQueue\ProcessorFactory\ProcessorFactoryInterface;
 use Gendoria\CommandQueue\Serializer\NullSerializer;
 use Gendoria\CommandQueue\Serializer\SerializedCommandData;
 use Gendoria\CommandQueue\Worker\Exception\TranslateErrorException;

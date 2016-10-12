@@ -1,11 +1,12 @@
 <?php
 
-namespace Gendoria\CommandQueueBundle\Tests\CommandQueue;
+namespace Gendoria\CommandQueueBundle\Tests\ProcessorFactory;
 
 use Gendoria\CommandQueue\Command\CommandInterface;
 use Gendoria\CommandQueue\Exception\MultipleProcessorsException;
-use Gendoria\CommandQueueBundle\CommandQueue\ContainerAwareProcessorFactory;
+use Gendoria\CommandQueueBundle\ProcessorFactory\ContainerAwareProcessorFactory;
 use Gendoria\CommandQueueBundle\Tests\Fixtures\DummyCommandProcessor;
+use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 use ReflectionObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -67,7 +68,7 @@ class ContainerAwareProcessorFactoryTest extends PHPUnit_Framework_TestCase
     public function testGetProcessorNoProcessor()
     {
         $command = $this->getMockBuilder(CommandInterface::class)->getMock();
-        $this->setExpectedException(\InvalidArgumentException::class, 'No processor registered for given type: '.get_class($command).'.', 500);
+        $this->setExpectedException(InvalidArgumentException::class, 'No processor registered for given type: '.get_class($command).'.', 500);
         $container = new ContainerBuilder();
         
         $container->compile();

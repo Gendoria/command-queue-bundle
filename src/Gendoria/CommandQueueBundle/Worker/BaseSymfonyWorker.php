@@ -5,7 +5,7 @@ namespace Gendoria\CommandQueueBundle\Worker;
 use Exception;
 use Gendoria\CommandQueue\Command\CommandInterface;
 use Gendoria\CommandQueue\CommandProcessor\CommandProcessorInterface;
-use Gendoria\CommandQueue\ProcessorFactoryInterface;
+use Gendoria\CommandQueue\ProcessorFactory\ProcessorFactoryInterface;
 use Gendoria\CommandQueue\Serializer\SerializerInterface;
 use Gendoria\CommandQueue\Worker\BaseWorker;
 use Gendoria\CommandQueueBundle\Event\QueueBeforeGetProcessorEvent;

@@ -4,7 +4,7 @@ namespace Gendoria\CommandQueueBundle\Tests\Worker;
 
 use Exception;
 use Gendoria\CommandQueue\CommandProcessor\CommandProcessorInterface;
-use Gendoria\CommandQueue\ProcessorFactoryInterface;
+use Gendoria\CommandQueue\ProcessorFactory\ProcessorFactoryInterface;
 use Gendoria\CommandQueue\Worker\Exception\ProcessorErrorException;
 use Gendoria\CommandQueueBundle\Event\QueueBeforeGetProcessorEvent;
 use Gendoria\CommandQueueBundle\Event\QueueBeforeTranslateEvent;

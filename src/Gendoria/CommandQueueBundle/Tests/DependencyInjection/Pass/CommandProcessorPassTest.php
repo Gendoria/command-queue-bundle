@@ -7,7 +7,7 @@
 namespace Gendoria\CommandQueueBundle\Tests\DependencyInjection\Pass;
 
 use Gendoria\CommandQueue\CommandProcessor\CommandProcessorInterface;
-use Gendoria\CommandQueue\ProcessorFactoryInterface;
+use Gendoria\CommandQueue\ProcessorFactory\ProcessorFactoryInterface;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\CommandProcessorPass;
 use InvalidArgumentException;
 use PHPUnit_Framework_MockObject_Generator;

@@ -1,7 +1,7 @@
 services:
 
     gendoria_command_queue.processor_factory:
-        class: Gendoria\CommandQueueBundle\CommandQueue\ContainerAwareProcessorFactory
+        class: Gendoria\CommandQueueBundle\ProcessorFactory\ContainerAwareProcessorFactory
         arguments: 
             - '@service_container'
             - '@?logger'
