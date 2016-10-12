@@ -12,7 +12,7 @@
 namespace Gendoria\CommandQueueBundle\DependencyInjection\Pass;
 
 use Gendoria\CommandQueue\QueueManager\MultipleQueueManagerInterface;
-use Gendoria\CommandQueue\QueueManager\QueueManagerInterface;
+use Gendoria\CommandQueue\QueueManager\SingleQueueManagerInterface;
 use Gendoria\CommandQueue\SendDriver\SendDriverInterface;
 use InvalidArgumentException;
 use ReflectionClass;
@@ -52,7 +52,7 @@ class PoolsPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds(self::QUEUE_MANAGER_TAG) as $id => $tags) {
             $def = $container->getDefinition($id);
             $reflection = new ReflectionClass($def->getClass());
-            if ($reflection->implementsInterface(QueueManagerInterface::class)) {
+            if ($reflection->implementsInterface(SingleQueueManagerInterface::class)) {
                 $this->setupSingleQueueManager($id, $def, $tags, $pools);
             } elseif ($reflection->implementsInterface(MultipleQueueManagerInterface::class)) {
                 $this->setupMultipleQueueManager($id, $def, $tags, $pools);

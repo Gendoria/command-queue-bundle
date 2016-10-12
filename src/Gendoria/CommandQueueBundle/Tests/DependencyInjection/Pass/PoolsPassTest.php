@@ -3,7 +3,7 @@
 namespace Gendoria\CommandQueueBundle\Tests\DependencyInjection\Pass;
 
 use Gendoria\CommandQueue\QueueManager\MultipleQueueManagerInterface;
-use Gendoria\CommandQueue\QueueManager\QueueManagerInterface;
+use Gendoria\CommandQueue\QueueManager\SingleQueueManagerInterface;
 use Gendoria\CommandQueue\SendDriver\SendDriverInterface;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\PoolsPass;
 use InvalidArgumentException;
@@ -65,7 +65,7 @@ class PoolsPassTest extends PHPUnit_Framework_TestCase
      */
     public function getSingleQueueManagerDefinition()
     {
-        $singleQueueManager = $this->getMockBuilder(QueueManagerInterface::class)->getMock();
+        $singleQueueManager = $this->getMockBuilder(SingleQueueManagerInterface::class)->getMock();
         $definitionDefaultPool = new Definition(get_class($singleQueueManager));
         $definitionDefaultPool->addTag(PoolsPass::QUEUE_MANAGER_TAG);
         $definitionNonDefaultPool = new Definition(get_class($singleQueueManager));
