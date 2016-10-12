@@ -3,7 +3,7 @@
 namespace Gendoria\CommandQueueBundle\DependencyInjection;
 
 use Gendoria\CommandQueue\QueueManager\NullQueueManager;
-use Gendoria\CommandQueue\QueueManager\SimpleQueueManager;
+use Gendoria\CommandQueue\QueueManager\SingleQueueManager;
 use InvalidArgumentException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -57,7 +57,7 @@ class GendoriaCommandQueueExtension extends Extension
         $managerDefinition = $container->getDefinition('gendoria_command_queue.manager');
         $poolNames = array_keys($config['pools']);
         foreach ($config['pools'] as $poolName => $poolConfig) {
-            $definition = new Definition(SimpleQueueManager::class);
+            $definition = new Definition(SingleQueueManager::class);
             $definition->addTag('gendoria_command_queue.send_manager', array('pool' => $poolName));
             $container->setDefinition('gendoria_command_queue.manager.'.$poolName, $definition);
             $managerDefinition->addTag('gendoria_command_queue.send_manager', array('pool' => $poolName, 'default' => $poolName == 'default'));
