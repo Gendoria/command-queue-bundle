@@ -7,7 +7,7 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/gendoria/command-queue-bundle.svg)](https://packagist.org/packages/gendoria/command-queue-bundle)
 
 Bundle implementing command queue mechanism, making it possible to send command from main Symfony process
-and execute them using pools of backend workers.
+and execute them using pools of backend workers using [`gendoria/command-queue` library](https://github.com/Gendoria/command-queue).
 
 Bundle created in cooperation with [Isobar Poland](http://www.isobar.com/pl/).
 
