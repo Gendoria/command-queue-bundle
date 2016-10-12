@@ -3,9 +3,9 @@
 namespace Gendoria\CommandQueueBundle\ProcessorFactory;
 
 use Gendoria\CommandQueue\Command\CommandInterface;
-use Gendoria\CommandQueue\Exception\MultipleProcessorsException;
+use Gendoria\CommandQueue\ProcessorFactory\Exception\MultipleProcessorsException;
+use Gendoria\CommandQueue\ProcessorFactory\Exception\ProcessorNotFoundException;
 use Gendoria\CommandQueue\ProcessorFactory\ProcessorFactory;
-use Gendoria\CommandQueue\ProcessorFactory\ProcessorNotFoundException;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;

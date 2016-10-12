@@ -3,7 +3,7 @@
 namespace Gendoria\CommandQueueBundle\Tests\ProcessorFactory;
 
 use Gendoria\CommandQueue\Command\CommandInterface;
-use Gendoria\CommandQueue\Exception\MultipleProcessorsException;
+use Gendoria\CommandQueue\ProcessorFactory\Exception\MultipleProcessorsException;
 use Gendoria\CommandQueueBundle\ProcessorFactory\ContainerAwareProcessorFactory;
 use Gendoria\CommandQueueBundle\Tests\Fixtures\DummyCommandProcessor;
 use InvalidArgumentException;
