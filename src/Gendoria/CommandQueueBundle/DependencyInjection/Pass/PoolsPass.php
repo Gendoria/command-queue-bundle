@@ -52,10 +52,10 @@ class PoolsPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds(self::QUEUE_MANAGER_TAG) as $id => $tags) {
             $def = $container->getDefinition($id);
             $reflection = new ReflectionClass($def->getClass());
-            if ($reflection->implementsInterface(SingleQueueManagerInterface::class)) {
-                $this->setupSingleQueueManager($id, $def, $tags, $pools);
-            } elseif ($reflection->implementsInterface(MultipleQueueManagerInterface::class)) {
+            if ($reflection->implementsInterface(MultipleQueueManagerInterface::class)) {
                 $this->setupMultipleQueueManager($id, $def, $tags, $pools);
+            } elseif ($reflection->implementsInterface(SingleQueueManagerInterface::class)) {
+                $this->setupSingleQueueManager($id, $def, $tags, $pools);
             } else {
                 throw new InvalidArgumentException(sprintf('Service "%s" does not implement one of required interfaces.', $id));
             }
