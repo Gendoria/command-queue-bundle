@@ -184,7 +184,7 @@ It uses Symfony serialization component.
 This driver is in development phase. No detailed configuration instructions are present at the moment.
 You are welcome to submit one.
 
-> **Warning** this serializer may not be available, if you use `jms/serializer-bundle` and it registeres
+> :warning: **Warning!** This serializer may not be available, if you use `jms/serializer-bundle` and it registeres
 > its own service as `serializer`. There is a `enable_short_alias` key in JMS serializer configuration, that
 > can change this behaviour.
 
