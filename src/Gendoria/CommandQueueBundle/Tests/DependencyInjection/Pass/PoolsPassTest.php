@@ -3,6 +3,7 @@
 namespace Gendoria\CommandQueueBundle\Tests\DependencyInjection\Pass;
 
 use Gendoria\CommandQueue\QueueManager\MultipleQueueManagerInterface;
+use Gendoria\CommandQueue\QueueManager\NullQueueManager;
 use Gendoria\CommandQueue\QueueManager\SingleQueueManagerInterface;
 use Gendoria\CommandQueue\SendDriver\SendDriverInterface;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\PoolsPass;
@@ -141,12 +142,16 @@ class PoolsPassTest extends PHPUnit_Framework_TestCase
         $multipleQueueManager = $this->getMockBuilder(MultipleQueueManagerInterface::class)->getMock();
         $definitionDefaultPool = new Definition(get_class($multipleQueueManager));
         $definitionDefaultPool->addTag(PoolsPass::QUEUE_MANAGER_TAG);
+        $nullQueueManager = new Definition(NullQueueManager::class);
+        $nullQueueManager->addTag(PoolsPass::QUEUE_MANAGER_TAG);
+        $nullQueueManager->addTag(PoolsPass::QUEUE_MANAGER_TAG, array('pool' => 'newpool'));
         $definitionNonDefaultPool = new Definition(get_class($multipleQueueManager));
         $definitionNonDefaultPool->addTag(PoolsPass::QUEUE_MANAGER_TAG);
         $definitionNonDefaultPool->addTag(PoolsPass::QUEUE_MANAGER_TAG, array('pool' => 'newpool'));
         return array(
             array($definitionDefaultPool),
             array($definitionNonDefaultPool),
+            array($nullQueueManager),
             array($definitionNonDefaultPool, false),
         );
     }    
