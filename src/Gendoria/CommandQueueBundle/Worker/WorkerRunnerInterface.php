@@ -22,6 +22,8 @@ interface WorkerRunnerInterface
      * @param array $options
      * @param ContainerInterface $container
      * @param OutputInterface $output
+     * @return void
+     * 
      * @throws InvalidArgumentException Thrown, if options array is incorrect for this worker.
      * @throws Exception Thrown, if worker could not be run or resulted in error.
      */
