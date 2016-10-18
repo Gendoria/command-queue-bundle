@@ -1,12 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Gendoria\CommandQueueBundle\Worker;
+
+use Exception;
+use InvalidArgumentException;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Worker runner interface describes functions needed to register service as worker runner.
@@ -24,7 +23,7 @@ interface WorkerRunnerInterface
      * @param ContainerInterface $container
      * @param OutputInterface $output
      * @throws InvalidArgumentException Thrown, if options array is incorrect for this worker.
-     * @throws \Exception Thrown, if worker could not be run or resulted in error.
+     * @throws Exception Thrown, if worker could not be run or resulted in error.
      */
     public function run(array $options, ContainerInterface $container, OutputInterface $output = null);
 }
