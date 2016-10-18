@@ -30,12 +30,14 @@
         "symfony/serializer": "~2.7|~3.0",
         "symfony/property-access": "~2.7|~3.0",
         "symfony/property-info": "~2.7|~3.0",
+        "symfony/console": "~2.7|~3.0",
         "jms/serializer": "~1.3",
         "jms/serializer-bundle": "~1.1"
     },
     "suggest": {
         "symfony/serializer": "Allows serialization using Symfony serializer component.",
-        "jms/serializer-bundle": "Allows serialization using JMS Serializer library."
+        "jms/serializer-bundle": "Allows serialization using JMS Serializer library.",
+        "symfony/console": "Required, if you want to use worker runner interface."
     },
     "autoload": {
         "psr-4": {
