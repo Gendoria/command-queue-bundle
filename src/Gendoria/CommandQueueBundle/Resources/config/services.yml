@@ -11,6 +11,11 @@ services:
         arguments:
             - '@?logger'
             
+    gendoria_command_queue.runner_manager:
+        class: Gendoria\CommandQueueBundle\Worker\WorkerRunnerManager
+        arguments:
+            - '@service_container'
+            
     gendoria_command_queue.driver.direct:
         class: Gendoria\CommandQueue\SendDriver\DirectProcessingDriver
         arguments:
