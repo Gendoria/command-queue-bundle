@@ -6,6 +6,7 @@ use Gendoria\CommandQueueBundle\DependencyInjection\GendoriaCommandQueueExtensio
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\CommandProcessorPass;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\PoolsPass;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\RegisterSerializerDriversPass;
+use Gendoria\CommandQueueBundle\DependencyInjection\Pass\WorkerRunnersPass;
 use Gendoria\CommandQueueBundle\GendoriaCommandQueueBundle;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -33,6 +34,7 @@ class GendoriaCommandQueueBundleTest extends PHPUnit_Framework_TestCase
         $hasPoolsPass = false;
         $hasCommandProcessorPass = false;
         $hasSerializersPass = false;
+        $hasRunnersPass = false;
         foreach ($passes as $pass) {
             if ($pass instanceof CommandProcessorPass) {
                 $hasCommandProcessorPass = true;
@@ -40,10 +42,13 @@ class GendoriaCommandQueueBundleTest extends PHPUnit_Framework_TestCase
                 $hasPoolsPass = true;
             } elseif ($pass instanceof RegisterSerializerDriversPass) {
                 $hasSerializersPass = true;
+            } elseif ($pass instanceof WorkerRunnersPass) {
+                $hasRunnersPass = true;
             }
         }
         $this->assertTrue($hasCommandProcessorPass, "Command processors pass should have been registered.");
         $this->assertTrue($hasPoolsPass, "Pools pass should have been registered.");
         $this->assertTrue($hasSerializersPass, "Serializers pass should have been registered.");
+        $this->assertTrue($hasRunnersPass, "Runners pass should have been registered.");
     }
 }
