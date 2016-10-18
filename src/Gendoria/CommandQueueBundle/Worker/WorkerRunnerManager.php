@@ -41,12 +41,12 @@ class WorkerRunnerManager
     /**
      * Register runner service.
      * 
-     * @param string $id Service ID.
      * @param string $name Worker name.
+     * @param string $id Service ID.
      * @param array $options Worker options.
      * @throws InvalidArgumentException Thrown, when there is no worker runner service registered in container.
      */
-    public function addRunner($id, $name, array $options = array())
+    public function addRunner($name, $id, array $options = array())
     {
         if (!$this->container->has($id)) {
             throw new InvalidArgumentException("Service container does not have required service registered.");
@@ -70,6 +70,16 @@ class WorkerRunnerManager
         /* @var $runner WorkerRunnerInterface */
         $runner = $this->container->get($this->runners[$name]['id']);
         $runner->run($this->runners[$name]['options'], $this->container, $output);
+    }
+    
+    /**
+     * Get registered runners.
+     * 
+     * @return string[]
+     */
+    public function getRunners()
+    {
+        return array_keys($this->runners);
     }
 
 }

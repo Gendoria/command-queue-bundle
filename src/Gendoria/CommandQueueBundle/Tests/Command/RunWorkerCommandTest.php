@@ -53,6 +53,8 @@ class RunWorkerCommandTest extends PHPUnit_Framework_TestCase
         $manager = new WorkerRunnerManager($container);
         $container->set('gendoria_command_queue.runner_manager', $manager);
         $runner = $this->getMockBuilder(WorkerRunnerInterface::class)->getMock();
+        $container->set('test_svc', $runner);
+        $manager->addRunner('different', 'test_svc');
         
         $application = new Application($kernel);
         $application->add(new RunWorkerCommand());
@@ -66,5 +68,6 @@ class RunWorkerCommandTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals(1, $exitCode);
         $this->assertContains('Worker "test" not registered.', $commandTester->getDisplay());
+        $this->assertContains('different', $commandTester->getDisplay());
     }    
 }

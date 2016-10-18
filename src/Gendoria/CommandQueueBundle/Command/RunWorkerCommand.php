@@ -28,9 +28,18 @@ class RunWorkerCommand extends ContainerAwareCommand
         /* @var $workerRunnerService WorkerRunnerManager */
         $workerRunnerService = $this->getContainer()->get('gendoria_command_queue.runner_manager');
         if (!$workerRunnerService->has($name)) {
+            $runners = $workerRunnerService->getRunners();
+            $runnersFormatted = array_map(array($this, 'formatRunnerName'), $runners);
             $output->writeln(sprintf('<error>Worker "%s" not registered.</error>', $name));
+            $output->writeln('Registered workers:');
+            $output->writeln($runnersFormatted);
             return 1;
         }
         $workerRunnerService->run($name, $output);
+    }
+    
+    public function formatRunnerName($name)
+    {
+        return sprintf("  * <info>%s</info>", $name);
     }
 }

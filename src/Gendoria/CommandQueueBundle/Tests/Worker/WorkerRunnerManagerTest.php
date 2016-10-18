@@ -20,11 +20,12 @@ class WorkerRunnerManagerTest extends PHPUnit_Framework_TestCase
     {
         $container = new ContainerBuilder();
         $service = $this->getMockBuilder(WorkerInterface::class)->getMock();
-        $container->set('test', $service);
+        $container->set('test_svc', $service);
         $manager = new WorkerRunnerManager($container);
         $this->assertFalse($manager->has('test'));
-        $manager->addRunner('test', 'test');
+        $manager->addRunner('test', 'test_svc');
         $this->assertTrue($manager->has('test'));
+        $this->assertEquals(array('test'), $manager->getRunners());
     }
     
     public function testAddNoService()
@@ -41,9 +42,9 @@ class WorkerRunnerManagerTest extends PHPUnit_Framework_TestCase
         $service = $this->getMockBuilder(WorkerRunnerInterface::class)->getMock();
         $service->expects($this->once())
             ->method('run');
-        $container->set('test', $service);
+        $container->set('test_svc', $service);
         $manager = new WorkerRunnerManager($container);
-        $manager->addRunner('test', 'test');
+        $manager->addRunner('test', 'test_svc');
         $manager->run('test');
     }    
     
