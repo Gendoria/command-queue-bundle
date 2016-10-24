@@ -23,7 +23,7 @@ class WorkerRunnerManagerTest extends PHPUnit_Framework_TestCase
         $container->set('test_svc', $service);
         $manager = new WorkerRunnerManager($container);
         $this->assertFalse($manager->has('test'));
-        $manager->addRunner('test', 'test_svc');
+        $manager->addRunnerService('test', 'test_svc');
         $this->assertTrue($manager->has('test'));
         $this->assertEquals(array('test'), $manager->getRunners());
     }
@@ -33,7 +33,7 @@ class WorkerRunnerManagerTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException(InvalidArgumentException::class, 'Service container does not have required service registered.');
         $container = new ContainerBuilder();
         $manager = new WorkerRunnerManager($container);
-        $manager->addRunner('test', 'test');
+        $manager->addRunnerService('test', 'test');
     }
     
     public function testRun()
@@ -45,7 +45,7 @@ class WorkerRunnerManagerTest extends PHPUnit_Framework_TestCase
         $container->set('test_svc', $service);
         $container->compile();
         $manager = new WorkerRunnerManager($container);
-        $manager->addRunner('test', 'test_svc');
+        $manager->addRunnerService('test', 'test_svc');
         $manager->run('test');
     }    
     

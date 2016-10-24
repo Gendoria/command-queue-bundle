@@ -67,7 +67,7 @@ class WorkerRunnersPass implements CompilerPassInterface
         $this->assertCorrectService($container, $serviceId);
         $options = !empty($tag['options']) ? json_decode($tag['options'], true) : array();
         $this->assertCorrectOptions($options);
-        $manager->addMethodCall('addRunner', array($tag['name'], $serviceId, $options));
+        $manager->addMethodCall('addRunnerService', array($tag['name'], $serviceId, $options));
     }
     
     /**

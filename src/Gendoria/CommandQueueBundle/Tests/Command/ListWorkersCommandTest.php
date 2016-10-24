@@ -29,7 +29,7 @@ class ListWorkersCommandTest extends PHPUnit_Framework_TestCase
         $container->set('gendoria_command_queue.runner_manager', $manager);
         $runner = $this->getMockBuilder(WorkerRunnerInterface::class)->getMock();
         $container->set('test_svc', $runner);
-        $manager->addRunner('different', 'test_svc');
+        $manager->addRunnerService('different', 'test_svc');
         $container->compile();
         
         $application = new Application($kernel);

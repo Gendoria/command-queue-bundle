@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Gendoria\CommandQueueBundle\Worker;
 
 use InvalidArgumentException;
@@ -46,7 +40,7 @@ class WorkerRunnerManager
      * @param array $options Worker options.
      * @throws InvalidArgumentException Thrown, when there is no worker runner service registered in container.
      */
-    public function addRunner($name, $id, array $options = array())
+    public function addRunnerService($name, $id, array $options = array())
     {
         if (!$this->container->has($id)) {
             throw new InvalidArgumentException("Service container does not have required service registered.");

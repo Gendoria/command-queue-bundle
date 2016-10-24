@@ -38,9 +38,9 @@ class WorkerRunnersPassTest extends PHPUnit_Framework_TestCase
         $pass = new WorkerRunnersPass();
         $pass->process($container);
         
-        $this->assertTrue($runnerManager->hasMethodCall('addRunner'));
+        $this->assertTrue($runnerManager->hasMethodCall('addRunnerService'));
         $calls = $runnerManager->getMethodCalls();
-        $this->assertEquals('addRunner', $calls[0][0]);
+        $this->assertEquals('addRunnerService', $calls[0][0]);
         $this->assertEquals(array('test', 'test_svc', $options), $calls[0][1]);
     }
     
