@@ -18,7 +18,7 @@ class WorkerRunnerManager
      * 
      * @var array
      */
-    private $runners = array();
+    private $runnerServices = array();
     
     /**
      * Container.
@@ -45,7 +45,7 @@ class WorkerRunnerManager
         if (!$this->container->has($id)) {
             throw new InvalidArgumentException("Service container does not have required service registered.");
         }
-        $this->runners[$name] = array(
+        $this->runnerServices[$name] = array(
             'id' => $id,
             'options' => $options,
         );
@@ -53,7 +53,7 @@ class WorkerRunnerManager
     
     public function has($name)
     {
-        return array_key_exists($name, $this->runners);
+        return array_key_exists($name, $this->runnerServices);
     }
     
     public function run($name, OutputInterface $output = null)
@@ -62,8 +62,8 @@ class WorkerRunnerManager
             throw new \InvalidArgumentException("No runner service registered for provided name.");
         }
         /* @var $runner WorkerRunnerInterface */
-        $runner = $this->container->get($this->runners[$name]['id']);
-        $runner->run($this->runners[$name]['options'], $this->container, $output);
+        $runner = $this->container->get($this->runnerServices[$name]['id']);
+        $runner->run($this->runnerServices[$name]['options'], $this->container, $output);
     }
     
     /**
@@ -73,7 +73,7 @@ class WorkerRunnerManager
      */
     public function getRunners()
     {
-        return array_keys($this->runners);
+        return array_keys($this->runnerServices);
     }
 
 }
