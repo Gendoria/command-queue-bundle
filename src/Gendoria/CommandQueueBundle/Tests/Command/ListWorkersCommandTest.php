@@ -35,7 +35,7 @@ class ListWorkersCommandTest extends PHPUnit_Framework_TestCase
         $application = new Application($kernel);
         $application->add(new ListWorkersCommand());
 
-        $command = $application->find('command-queue:list-workers');
+        $command = $application->find('cmq:worker:list');
         $commandTester = new CommandTester($command);
         $exitCode = $commandTester->execute(array());
         $this->assertEquals(0, $exitCode);

@@ -35,7 +35,7 @@ class RunWorkerCommandTest extends PHPUnit_Framework_TestCase
         $application = new Application($kernel);
         $application->add(new RunWorkerCommand());
 
-        $command = $application->find('command-queue:worker');
+        $command = $application->find('cmq:worker:run');
         $commandTester = new CommandTester($command);
         $commandTester->execute(
             array(
@@ -61,7 +61,7 @@ class RunWorkerCommandTest extends PHPUnit_Framework_TestCase
         $application = new Application($kernel);
         $application->add(new RunWorkerCommand());
 
-        $command = $application->find('command-queue:worker');
+        $command = $application->find('cmq:worker:run');
         $commandTester = new CommandTester($command);
         $exitCode = $commandTester->execute(
             array(

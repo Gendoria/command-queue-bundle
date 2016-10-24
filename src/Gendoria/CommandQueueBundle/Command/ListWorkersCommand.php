@@ -18,7 +18,7 @@ class ListWorkersCommand extends ContainerAwareCommand
 
     protected function configure()
     {
-        $this->setName('command-queue:list-workers')
+        $this->setName('cmq:worker:list')
             ->setDescription('List available workers');
     }
 

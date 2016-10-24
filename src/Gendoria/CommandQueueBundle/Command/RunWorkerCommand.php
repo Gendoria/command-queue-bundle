@@ -17,7 +17,7 @@ class RunWorkerCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('command-queue:worker')
+        $this->setName('cmq:worker:run')
             ->setDescription('Runs a worker process. Specific worker has to be registered by driver or application.')
             ->addArgument('name', InputArgument::REQUIRED, 'Worker name.');
     }
