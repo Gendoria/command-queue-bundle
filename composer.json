@@ -20,7 +20,7 @@
         "php": ">=5.5.0",
         "psr/log": "~1.0",
         "symfony/framework-bundle": "~2.7|~3.0",
-        "symfony/dependency-injection": "~2.7|~3.0",
+        "symfony/dependency-injection": "~2.7|~3.0@stable",
         "symfony/yaml": "~2.7|~3.0",
         "symfony/monolog-bundle": "~2.4",
         "gendoria/command-queue": ">=0.1"
