@@ -43,6 +43,7 @@ class WorkerRunnerManagerTest extends PHPUnit_Framework_TestCase
         $service->expects($this->once())
             ->method('run');
         $container->set('test_svc', $service);
+        $container->compile();
         $manager = new WorkerRunnerManager($container);
         $manager->addRunner('test', 'test_svc');
         $manager->run('test');

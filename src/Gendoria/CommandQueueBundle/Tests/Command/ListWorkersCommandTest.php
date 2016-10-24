@@ -30,6 +30,7 @@ class ListWorkersCommandTest extends PHPUnit_Framework_TestCase
         $runner = $this->getMockBuilder(WorkerRunnerInterface::class)->getMock();
         $container->set('test_svc', $runner);
         $manager->addRunner('different', 'test_svc');
+        $container->compile();
         
         $application = new Application($kernel);
         $application->add(new ListWorkersCommand());
