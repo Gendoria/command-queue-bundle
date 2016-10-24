@@ -23,3 +23,17 @@ services:
             - '@?logger'
         calls:
             - [setLogger, ['@?logger']]
+            
+    gendoria_command_queue.command.list:
+        class: Gendoria\CommandQueue\Console\Command\ListWorkersCommand
+        calls:
+            - [setRunnerManager, ['@gendoria_command_queue.runner_manager']]
+        tags:
+            - { name: console.command }            
+            
+    gendoria_command_queue.command.run:
+        class: Gendoria\CommandQueue\Console\Command\RunWorkerCommand
+        calls:
+            - [setRunnerManager, ['@gendoria_command_queue.runner_manager']]
+        tags:
+            - { name: console.command }            

@@ -2,6 +2,7 @@
 
 namespace Gendoria\CommandQueueBundle\Worker;
 
+use Gendoria\CommandQueue\Worker\WorkerRunnerManager as BaseRunnerManager;
 use InvalidArgumentException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -11,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @author Tomasz Struczyński <t.struczynski@gmail.com>
  */
-class WorkerRunnerManager
+class WorkerRunnerManager extends BaseRunnerManager
 {
     /**
      * Worker runner services configuration.
@@ -51,29 +52,38 @@ class WorkerRunnerManager
         );
     }
     
+    /**
+     * {@inheritdoc}
+     */
     public function has($name)
     {
-        return array_key_exists($name, $this->runnerServices);
+        if (parent::has($name)) {
+            return true;
+        }
+        return !empty($this->runnerServices[$name]);
     }
     
+    /**
+     * {@inheritdoc}
+     */
     public function run($name, OutputInterface $output = null)
     {
         if (!$this->has($name)) {
             throw new \InvalidArgumentException("No runner service registered for provided name.");
         }
-        /* @var $runner WorkerRunnerInterface */
-        $runner = $this->container->get($this->runnerServices[$name]['id']);
-        $runner->run($this->runnerServices[$name]['options'], $this->container, $output);
+        if (!parent::has($name)) {
+            $runner = $this->container->get($this->runnerServices[$name]['id']);
+            $this->addRunner($name, $runner, $this->runnerServices[$name]['options']);
+        }
+        parent::run($name, $output);
     }
     
     /**
-     * Get registered runners.
-     * 
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getRunners()
     {
-        return array_keys($this->runnerServices);
+        return array_merge(array_keys($this->runnerServices), parent::getRunners());
     }
 
 }

@@ -2,10 +2,12 @@
 
 namespace Gendoria\CommandQueueBundle\Tests\DependencyInjection\Pass;
 
+use Gendoria\CommandQueue\Worker\WorkerRunnerInterface;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\WorkerRunnersPass;
-use Gendoria\CommandQueueBundle\Worker\WorkerRunnerInterface;
 use Gendoria\CommandQueueBundle\Worker\WorkerRunnerManager;
+use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
+use stdClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -46,7 +48,7 @@ class WorkerRunnersPassTest extends PHPUnit_Framework_TestCase
     
     public function testPassNoName()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Tag '.WorkerRunnersPass::WORKER_RUNNER_TAG.' has to contain "name" parameter.');
+        $this->setExpectedException(InvalidArgumentException::class, 'Tag '.WorkerRunnersPass::WORKER_RUNNER_TAG.' has to contain "name" parameter.');
         $runerMock = $this->getMockBuilder(WorkerRunnerInterface::class)->getMock();
         $container = new ContainerBuilder();
         $runnerManager = new Definition(WorkerRunnerManager::class, array('@service_container'));
@@ -59,8 +61,8 @@ class WorkerRunnersPassTest extends PHPUnit_Framework_TestCase
     
     public function testPassIncorrectService()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Runner service has to implement WorkerRunnerInterface.');
-        $runerMock = $this->getMockBuilder(\stdClass::class)->getMock();
+        $this->setExpectedException(InvalidArgumentException::class, 'Runner service has to implement WorkerRunnerInterface.');
+        $runerMock = $this->getMockBuilder(stdClass::class)->getMock();
         $container = new ContainerBuilder();
         $runnerManager = new Definition(WorkerRunnerManager::class, array('@service_container'));
         $workerRunner = new Definition(get_class($runerMock));
@@ -72,7 +74,7 @@ class WorkerRunnersPassTest extends PHPUnit_Framework_TestCase
     
     public function testPassIncorrectOptions()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Options parameter has to be a valid JSON.');
+        $this->setExpectedException(InvalidArgumentException::class, 'Options parameter has to be a valid JSON.');
         $runerMock = $this->getMockBuilder(WorkerRunnerInterface::class)->getMock();
         $container = new ContainerBuilder();
         $runnerManager = new Definition(WorkerRunnerManager::class, array('@service_container'));

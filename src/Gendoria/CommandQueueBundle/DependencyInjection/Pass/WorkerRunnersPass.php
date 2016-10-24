@@ -2,7 +2,7 @@
 
 namespace Gendoria\CommandQueueBundle\DependencyInjection\Pass;
 
-use Gendoria\CommandQueueBundle\Worker\WorkerRunnerInterface;
+use Gendoria\CommandQueue\Worker\WorkerRunnerInterface;
 use InvalidArgumentException;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

@@ -3,7 +3,7 @@
 namespace Gendoria\CommandQueueBundle\Tests\Worker;
 
 use Gendoria\CommandQueue\Worker\WorkerInterface;
-use Gendoria\CommandQueueBundle\Worker\WorkerRunnerInterface;
+use Gendoria\CommandQueue\Worker\WorkerRunnerInterface;
 use Gendoria\CommandQueueBundle\Worker\WorkerRunnerManager;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
