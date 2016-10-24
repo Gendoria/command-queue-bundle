@@ -37,3 +37,17 @@ services:
             - [setRunnerManager, ['@gendoria_command_queue.runner_manager']]
         tags:
             - { name: console.command }            
+
+    gendoria_command_queue.listener.clear_logs:
+        class: Gendoria\CommandQueueBundle\Listener\ClearLogsListener
+        arguments:
+            - '@logger'
+        tags:
+            - { name: kernel.event_subscriber }
+            
+    gendoria_command_queue.listener.clear_entity_managers:
+        class: Gendoria\CommandQueueBundle\Listener\ClearEntityManagersListener
+        arguments:
+            - '@doctrine'
+        tags:
+            - { name: kernel.event_subscriber }

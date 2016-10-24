@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -16,7 +17,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class GendoriaCommandQueueExtension extends Extension
+class GendoriaCommandQueueExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * Get extension alias.
@@ -49,6 +50,9 @@ class GendoriaCommandQueueExtension extends Extension
             $managerDefinition->setClass(NullQueueManager::class);
         }
         $this->setupManagers($config, $container);
+        if (!$config['clear_entity_managers_listener_enabled']) {
+            $container->removeDefinition('gendoria_command_queue.listener.clear_entity_managers');
+        }        
     }
     
     private function setupManagers($config, ContainerBuilder $container)
@@ -70,4 +74,33 @@ class GendoriaCommandQueueExtension extends Extension
             $managerDefinition->addMethodCall('addCommandRoute', array($commandExpression, $poolName));
         }
     }
+    
+    /**
+     * Prepend configuration.
+     *
+     * @param ContainerBuilder $container
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $this->disableDoctrineListener($container);
+    }
+    
+    /**
+     * Disable clear entity managers listener, if no doctrine bundle is installed.
+     * 
+     * @param ContainerBuilder $container
+     * @return void
+     */
+    private function disableDoctrineListener(ContainerBuilder $container)
+    {
+        if (!$container->hasParameter('kernel.bundles')) {
+            return;
+        }
+        $bundles = $container->getParameter('kernel.bundles');
+        if (!isset($bundles['DoctrineBundle'])) {
+            $container->prependExtensionConfig($this->getAlias(), array(
+                'clear_entity_managers_listener_enabled' => false,
+            ));
+        }
+    }   
 }

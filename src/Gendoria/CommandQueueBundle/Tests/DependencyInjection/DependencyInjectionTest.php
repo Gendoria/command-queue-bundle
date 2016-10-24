@@ -8,22 +8,26 @@ namespace Gendoria\CommandQueueBundle\Tests\DependencyInjection;
 
 use Gendoria\CommandQueue\Console\Command\ListWorkersCommand;
 use Gendoria\CommandQueue\Console\Command\RunWorkerCommand;
+use Gendoria\CommandQueue\ProcessorFactory\ProcessorFactoryInterface;
 use Gendoria\CommandQueue\QueueManager\MultipleQueueManager;
 use Gendoria\CommandQueue\QueueManager\NullQueueManager;
 use Gendoria\CommandQueue\SendDriver\SendDriverInterface;
 use Gendoria\CommandQueueBundle\DependencyInjection\GendoriaCommandQueueExtension;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\CommandProcessorPass;
 use Gendoria\CommandQueueBundle\DependencyInjection\Pass\PoolsPass;
+use Gendoria\CommandQueueBundle\Serializer\SymfonySerializer;
 use Gendoria\CommandQueueBundle\Worker\WorkerRunnerManager;
 use InvalidArgumentException;
 use JMS\Serializer\Serializer as JmsSerializerClass;
 use PHPUnit_Framework_TestCase;
+use Psr\Log\NullLogger;
 use ReflectionClass;
 use ReflectionObject;
 use stdClass;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Serializer\Serializer as SymfonySerializerClass;
 
 /**
@@ -47,6 +51,13 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
             'enabled' => false,
         );
         $extension->load(array($config), $container);
+        
+        $container->set('logger', new NullLogger());
+        $container->set('doctrine', $this->getMockBuilder(EntityManagerInterface::class)->getMock());
+        $container->set('gendoria_command_queue.serializer.symfony', $this->getMockBuilder(SymfonySerializer::class)->disableOriginalConstructor()->getMock());
+        $container->set('event_dispatcher', $this->getMockBuilder(EventDispatcherInterface::class)->getMock());
+        $container->set('gendoria_command_queue.processor_factory', $this->getMockBuilder(ProcessorFactoryInterface::class)->geTMock());
+        
         $container->compile();
 
         /* @var $manager MultipleQueueManager */
@@ -77,6 +88,13 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
             'dummy' => new Definition(get_class($sendDriverMock)),
         ));
         $extension->load(array($config), $container);
+        
+        $container->set('logger', new NullLogger());
+        $container->set('doctrine', $this->getMockBuilder(EntityManagerInterface::class)->getMock());
+        $container->set('gendoria_command_queue.serializer.symfony', $this->getMockBuilder(SymfonySerializer::class)->disableOriginalConstructor()->getMock());
+        $container->set('event_dispatcher', $this->getMockBuilder(EventDispatcherInterface::class)->getMock());
+        $container->set('gendoria_command_queue.processor_factory', $this->getMockBuilder(ProcessorFactoryInterface::class)->geTMock());
+                
         $container->addCompilerPass(new PoolsPass());
         $container->addCompilerPass(new CommandProcessorPass());
         $container->compile();
@@ -113,6 +131,13 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
             'dummy' => new Definition(get_class($sendDriverMock)),
         ));
         $extension->load(array($config), $container);
+        
+        $container->set('logger', new NullLogger());
+        $container->set('doctrine', $this->getMockBuilder(EntityManagerInterface::class)->getMock());
+        $container->set('gendoria_command_queue.serializer.symfony', $this->getMockBuilder(SymfonySerializer::class)->disableOriginalConstructor()->getMock());
+        $container->set('event_dispatcher', $this->getMockBuilder(EventDispatcherInterface::class)->getMock());
+        $container->set('gendoria_command_queue.processor_factory', $this->getMockBuilder(ProcessorFactoryInterface::class)->geTMock());
+                
         $container->addCompilerPass(new PoolsPass());
         $container->addCompilerPass(new CommandProcessorPass());
         $container->compile();
@@ -215,5 +240,47 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
         $config = array(
         );
         $extension->load(array($config), $container);
+    }   
+    
+    public function testPrependNoDoctrine()
+    {
+        $container = new ContainerBuilder();
+        $container->setParameter('kernel.bundles', array());
+        
+        $config = array(
+            'pools' => array(
+                'default' => array(
+                    'send_driver' => '@dummy',
+                ),
+            ),
+        );
+        $container->prependExtensionConfig('gendoria_command_queue', $config);
+        
+        $extension = new GendoriaCommandQueueExtension();
+        $extension->prepend($container);
+        $parsedConfig = $container->getExtensionConfig($extension->getAlias());
+        $extension->load($parsedConfig, $container);
+        $this->assertFalse($container->has('gendoria_command_queue.listener.clear_entity_managers'));
     }    
+    
+    public function testPrependNoBundles()
+    {
+        $container = new ContainerBuilder();
+        
+        $config = array(
+            'pools' => array(
+                'default' => array(
+                    'send_driver' => '@dummy',
+                ),
+            ),
+        );
+        $container->prependExtensionConfig('gendoria_command_queue', $config);
+        
+        $extension = new GendoriaCommandQueueExtension();
+        $extension->prepend($container);
+        $parsedConfig = $container->getExtensionConfig($extension->getAlias());
+        $extension->load($parsedConfig, $container);
+        $this->assertTrue($container->has('gendoria_command_queue.listener.clear_entity_managers'));
+    }    
+    
 }
