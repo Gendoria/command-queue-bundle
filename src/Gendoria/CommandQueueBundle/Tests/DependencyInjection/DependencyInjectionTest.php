@@ -111,6 +111,44 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($sendDriversProp->getValue($manager), array('default' => $sendDriverMock));
     }
     
+    public function testNoClearLogsListener()
+    {
+        $container = new ContainerBuilder();
+        $extension = new GendoriaCommandQueueExtension();
+        $config = array(
+            'pools' => array(
+                'default' => array(
+                    'send_driver' => '@dummy',
+                ),
+            ),
+            'listeners' => array(
+                'clear_logs' => false,
+            )
+        );
+        $extension->load(array($config), $container);
+        $this->assertFalse($container->hasDefinition('gendoria_command_queue.listener.clear_logs'));
+        $this->assertTrue($container->hasDefinition('gendoria_command_queue.listener.clear_entity_managers'));
+    }    
+    
+    public function testNoClearEntityManagersListener()
+    {
+        $container = new ContainerBuilder();
+        $extension = new GendoriaCommandQueueExtension();
+        $config = array(
+            'pools' => array(
+                'default' => array(
+                    'send_driver' => '@dummy',
+                ),
+            ),
+            'listeners' => array(
+                'clear_entity_managers' => false,
+            )
+        );
+        $extension->load(array($config), $container);
+        $this->assertTrue($container->hasDefinition('gendoria_command_queue.listener.clear_logs'));
+        $this->assertFalse($container->hasDefinition('gendoria_command_queue.listener.clear_entity_managers'));
+    }    
+    
     public function testRegisteredCommands()
     {
         $container = new ContainerBuilder();
@@ -240,7 +278,7 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
         $config = array(
         );
         $extension->load(array($config), $container);
-    }   
+    }
     
     public function testPrependNoDoctrine()
     {
@@ -261,6 +299,7 @@ class DependencyInjectionTest extends PHPUnit_Framework_TestCase
         $parsedConfig = $container->getExtensionConfig($extension->getAlias());
         $extension->load($parsedConfig, $container);
         $this->assertFalse($container->has('gendoria_command_queue.listener.clear_entity_managers'));
+        $this->assertTrue($container->has('gendoria_command_queue.listener.clear_logs'));
     }    
     
     public function testPrependNoBundles()

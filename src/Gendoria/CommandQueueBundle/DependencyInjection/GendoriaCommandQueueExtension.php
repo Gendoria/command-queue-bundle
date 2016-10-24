@@ -50,8 +50,11 @@ class GendoriaCommandQueueExtension extends Extension implements PrependExtensio
             $managerDefinition->setClass(NullQueueManager::class);
         }
         $this->setupManagers($config, $container);
-        if (!$config['clear_entity_managers_listener_enabled']) {
+        if (!$config['listeners']['clear_entity_managers']) {
             $container->removeDefinition('gendoria_command_queue.listener.clear_entity_managers');
+        }        
+        if (!$config['listeners']['clear_logs']) {
+            $container->removeDefinition('gendoria_command_queue.listener.clear_logs');
         }        
     }
     
@@ -99,7 +102,9 @@ class GendoriaCommandQueueExtension extends Extension implements PrependExtensio
         $bundles = $container->getParameter('kernel.bundles');
         if (!isset($bundles['DoctrineBundle'])) {
             $container->prependExtensionConfig($this->getAlias(), array(
-                'clear_entity_managers_listener_enabled' => false,
+                'listeners' => array(
+                    'clear_entity_managers' => false
+                )
             ));
         }
     }   

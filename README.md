@@ -61,11 +61,14 @@ class AppKernel extends Kernel
 
 To be able to use the bundle, you have to add correct configuration in your `app/config/config.yml`.
 
-The example bundle configuration looks as follows:
+The example full bundle configuration looks as follows:
 
 ```yaml
 gendoria_command_queue:
     enabled: true
+    listeners:
+        clear_logs: true
+        clear_entity_managers: true
     pools:
         default:
             send_driver: '@gendoria_command_queue_rabbit_mq_driver.driver.default'
@@ -75,7 +78,9 @@ gendoria_command_queue:
         '\Namespaced\CommandClassOrInterface': pool2
 ```
 
-Enabled property allows to enable or disable bundle (eg. on some environments like testing).
+`enabled` property allows to enable or disable bundle (eg. on some environments like testing).
+
+`listeners` section is optional. By default all listeners are turned on.
 
 Pools section describes available queue pools. It is required, when bundle is enabled. At least one pool, 
 named `default` has to be present.
